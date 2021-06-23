@@ -1,0 +1,5 @@
+rootProject.name = 'snappy-odbc'
+
+include ':snappydata-native'
+
+project(':snappydata-native').projectDir = "$rootDir/../snappydata/store/native" as File

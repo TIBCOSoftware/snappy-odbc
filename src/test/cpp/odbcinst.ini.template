@@ -1,0 +1,27 @@
+[ODBC]
+Trace = no
+TraceFile = dmtrace.log
+
+[ODBC Drivers]
+TIBCO ComputeDB ODBC Driver = Installed
+SnappyData Debug = Installed
+
+[TIBCO ComputeDB ODBC Driver]
+Driver = <driver-path>
+Setup = <driver-path>
+Description = Driver for connecting to SnappyData cluster
+APILevel = 1
+ConnectFunctions = YYN
+DriverODBCVer = 03.52
+FileUsage = 0
+SQLLevel = 0
+
+[SnappyData Debug]
+Driver = <debug-driver-path>
+Setup = <debug-driver-path>
+Description = Driver for connecting to SnappyData cluster
+APILevel = 1
+ConnectFunctions = YYN
+DriverODBCVer = 03.52
+FileUsage = 0
+SQLLevel = 0

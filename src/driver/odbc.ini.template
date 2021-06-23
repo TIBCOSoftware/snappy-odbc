@@ -1,0 +1,61 @@
+[ODBC Data Sources]
+snappydata = SnappyData
+
+[snappydata]
+Driver = SnappyData
+Description = SnappyData cluster
+Server = locator1
+Port = 1527
+; username and password if security is enabled in the cluster
+;User = snappydata
+;Password = snappydata
+
+; enable selecting the server node which is least loaded (in terms
+;   of number of existing client connections) in the cluster;
+; default is true and the locator's client address/port is recommended
+; to be used for Server/Port properties above
+;LoadBalance = true
+
+; enable re-connecting to another server node automatically before the
+; next operation in case the current operation fails due to network
+; or server failure issues
+;AutoReconnect = false
+
+; enable SSL communication with the server which must be started with
+; -thrift-ssl=true option and an appropriate -thrift-ssl-properties
+;SSLMode = true
+; if the server uses certificates not present in system certificate store
+; or if mutual authentication is enabled (client-auth=true in server's
+;    -thrift-ssl-properties), then this can be used to provide the
+; required properties; available ones include:
+;
+;  truststore=<path/file> : trusted certificate directory or PEM file; the directory can
+;                           contain multiple PEM files hashed using OpenSSL's "c_rehash"
+;                           (default is to search in standard system paths like /etc/ssl)
+;  client-auth=<true/false> : also enable authentication of client by server
+;  keystore=<file> : PEM file having client's private key when client-auth=true
+;  keystore-password=<password> : password for the secured keystore file
+;  certificate=<file> : PEM file having client's public key when client-auth=true
+;                       (can be same as keystore above if both are in the same file)
+;  ciphers=<cipher1>:<cipher2>:... : restrict ciphers to given list -- see 'openssl ciphers'
+;                                    (default is all except insecure ones like MD5)
+;
+;SSLProperties = truststore=/home/user/ssl/certs,client-auth=true,keystore=/home/user/ssl/client-keystore.pem,keystore-password=password,certificate=/home/user/ssl/client-keystore.pem
+
+; Store passwords in the system keyring/kwallet/keychain with odbc.ini having
+; value in the form of <attribute>:<value> which is retrieved from user's
+; keyring/kwallet/keychain using 'secret-tool lookup <attribute> <value>'.
+; This applies to both the user's password field as well as the keystore-password
+; in SSLProperties.
+;CredentialManager = false
+
+; file for driver-level logs; note that this is different from driver
+; manager logging which can be enabled in odbcinst.ini
+;LogFile = snappyodbc.log
+
+; allowed levels all/trace/debug/fine/info/warn/error/fatal/none
+; levels of debug and less will generate all function entry/exit
+; logs which will can be too much and useful only for debugging;
+; fine level will produce detailed stack traces in case of failures;
+; default level is "info"
+;LogLevel = info

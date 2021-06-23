@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?include VariableInclude.wxi ?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?if $(sys.BUILDARCH) = x64?>
+    <?define ProductId = $(var.ProductId_x64) ?>
+    <?define ProductName = "SnappyData ODBC Driver" ?>
+    <?define RegistryComponentGUID = "3056D4EA-373A-4273-9A90-67D519627553" ?>
+    <?define RegistryPrefix = "SOFTWARE\ODBC" ?>
+  <?else?>
+    <?define ProductId = $(var.ProductId_x86) ?>
+    <?define ProductName = "SnappyData ODBC Driver (32-bit)" ?>
+    <?define RegistryComponentGUID = "10BC3658-9F75-424E-9655-EFAB39EA490C" ?>
+    <?if $(var.Installer_x86_32bit) = "yes" ?>
+      <?define RegistryPrefix = "SOFTWARE\ODBC" ?>
+    <?else?>
+      <?define RegistryPrefix = "SOFTWARE\WOW6432Node\ODBC" ?>
+    <?endif?>
+  <?endif?>
+
+  <Product Id='$(var.ProductId)' Name='$(var.ProductName)' Language="1033"
+             Version="1.3.0" Manufacturer="TIBCO Software Inc."
+             UpgradeCode='66A6AE62-0FAC-421E-91F1-3EFB94A22F0C' Codepage="1252">
+
+    <Package Id='*' Keywords='Installer' Description='SnappyData ODBC Driver Installer'
+                 InstallerVersion="400"
+                 Compressed="yes" InstallScope="perMachine" Manufacturer="TIBCO Software Inc."/>
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <Media Id="1" Cabinet="cab1.cab" EmbedCab="yes" />
+
+    <!--check the Windows Version-->
+    <Condition Message="SnappyData ODBC Driver is only supported on Windows 7 or higher">
+      <![CDATA[Installed OR (VersionNT >= 601) OR (VersionNT64 >= 601) ]]>
+    </Condition>
+
+    <!--**Note******************Few necessary comments -start*******************-->
+    <!--<?if $(var.Platform) =x64?>  should not use this. Not suggested by WIX documentation-->
+    <!--This SetDirectory should be before defining the directory structure
+    And the reason of using of this,visit link
+    https://stackoverflow.com/questions/5479790/wix-how-to-override-c-program-files-x86-on-x64-machine-in-wixui-advanced-s
+    -->
+    <!--<SetDirectory
+            Id="APPLICATIONFOLDER"
+            Value="[ProgramFiles64Folder][ApplicationFolderName]">APPLICATIONFOLDER=""</SetDirectory>-->
+
+    <!--**Note******************Few necessary comments -end*******************-->
+
+    <?if $(sys.BUILDARCH)=x64?>
+      <?define Win64 = "yes" ?>
+      <?define VCRedistFileName="Microsoft_VC142_CRT_x64.msm"?>
+    <?else?>
+      <?define Win64 = "no" ?>
+      <?define VCRedistFileName="Microsoft_VC142_CRT_x86.msm"?>
+    <?endif?>
+
+    <!--Step 1 : Define the directory structure-->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <?if $(sys.BUILDARCH)=x64?>
+        <Directory Id="ProgramFiles64Folder">
+          <Directory Id="APPLICATIONFOLDER" Name="SnappyData ODBC Driver">
+            <Directory Id="APPLICATIONDEBUGFOLDER" Name="debug"/>
+          </Directory>
+        </Directory>
+      <?else?>
+        <Directory Id="ProgramFilesFolder">
+          <Directory Id="APPLICATIONFOLDER" Name="SnappyData ODBC Driver">
+            <Directory Id="APPLICATIONDEBUGFOLDER" Name="debug"/>
+          </Directory>
+        </Directory>
+      <?endif?>
+    </Directory>
+
+    <!--Step 2: Add files to your installer package-->
+    <DirectoryRef Id="APPLICATIONFOLDER">
+      <?if $(var.Win64)="yes"?>
+      <!--64 bit installation-->
+        <Component Id="odbcsetupdll" Guid="027EFD36-A684-4684-B66F-AB55053C8FD8" Win64="yes">
+          <File Id="odbcsetupdll" Name="odbcSetup.dll" Source="..\..\..\build-artifacts\win\snappydata\odbc\64\odbcSetup.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="odbcsetuplib" Guid="DA1BD75C-D4BB-47A3-A770-BFC02EDA8404" Win64="yes">
+          <File Id="odbcsetuplib" Name="odbcSetup.lib"  Source="..\..\..\build-artifacts\win\snappydata\odbc\64\odbcSetup.lib" Checksum="yes"/>
+        </Component>
+        <Component Id="odbcsetupexp" Guid="EE45DC61-1597-4CFB-B182-BAEE764F9EB7" Win64="yes">
+          <File Id="odbcsetupexp" Name="odbcSetup.exp"  Source="..\..\..\build-artifacts\win\snappydata\odbc\64\odbcSetup.exp" Checksum="yes"/>
+        </Component>
+        <Component Id="odbcsetuppdb" Guid="DF0A48D1-37A9-4C8B-AE61-D348F7678D26" Win64="yes">
+          <File Id="odbcsetuppdb" Name="odbcSetup.pdb"  Source="..\..\..\build-artifacts\win\snappydata\odbc\64\odbcSetup.pdb" Checksum="yes"/>
+        </Component>
+        <Component Id="snappyodbcdll" Guid="D6C109E5-272D-41FA-9C98-5DA729FCE3E7" Win64="yes">
+          <File Id="snappyodbcdll" Name="snappyodbc.dll"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\snappyodbc.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="snappyodbclib" Guid="78008B66-6000-4C09-862E-726E90238156" Win64="yes">
+          <File Id="snappyodbclib" Name="snappyodbc.lib"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\snappyodbc.lib" Checksum="yes"/>
+        </Component>
+        <Component Id="snappyodbcexp" Guid="401F58FF-8953-4BB0-ADF8-68BC28A0CEF9" Win64="yes">
+          <File Id="snappyodbcexp" Name="snappyodbc.exp"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\snappyodbc.exp" Checksum="yes"/>
+        </Component>
+        <Component Id="libcryptodll" Guid="89212A43-33DC-4029-A4CC-6132CA86E657" Win64="yes">
+          <File Id="libcryptodll" Name="libcrypto-1_1-x64.dll" Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\libcrypto-1_1-x64.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="libcryptopdb" Guid="DB9FE5C5-0DF7-4790-96F9-B551A2333896" Win64="yes">
+          <File Id="libcryptopdb" Name="libcrypto-1_1-x64.pdb" Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\libcrypto-1_1-x64.pdb" Checksum="yes"/>
+        </Component>
+        <Component Id="libssldll" Guid="335F12C6-8580-416B-8441-0D9C3007BDDC" Win64="yes">
+          <File Id="libssldll" Name="libssl-1_1-x64.dll"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\libssl-1_1-x64.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="libsslpdb" Guid="6E9B0615-6925-48F6-806B-66030A22F4FF" Win64="yes">
+          <File Id="libsslpdb" Name="libssl-1_1-x64.pdb"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\libssl-1_1-x64.pdb" Checksum="yes"/>
+        </Component>
+        <Component Id="capidll" Guid="968EE607-90BA-47FE-BA05-31E3E234F3A2" Win64="yes">
+          <File Id="capidll" Name="capi.dll"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\engines-1_1\capi.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="capipdb" Guid="8AC498E1-29A1-4A60-A9B4-E10DCFFD1266" Win64="yes">
+          <File Id="capipdb" Name="capi.pdb"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\engines-1_1\capi.pdb" Checksum="yes"/>
+        </Component>
+        <Component Id="padlockdll" Guid="05F7D05F-EF02-4ECB-883F-0D4BDA1183CD" Win64="yes">
+          <File Id="padlockdll" Name="padlock.dll"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\engines-1_1\padlock.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="padlockpdb" Guid="E63E0E3A-748B-4320-9698-4F7D3E267AAE" Win64="yes">
+          <File Id="padlockpdb" Name="padlock.pdb"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\engines-1_1\padlock.pdb" Checksum="yes"/>
+        </Component>
+        <!-- Well known SSL trusted certificates common to both 64 and 32 bit installs -->
+        <Component Id="sslcerts" Guid="4E2C86DB-D1A9-4FDB-9E34-0D76BADFCCF1" Win64="yes">
+          <File Id="sslcerts" Name="ca-certificates.crt" Source="..\..\..\build-artifacts\win\snappyodbc\SSL\ca-certificates.crt" Checksum="yes"/>
+        </Component>
+      <?else?>
+      <!--32 bit installation-->
+        <Component Id="odbcsetupdll" Guid="39A60135-C7C4-4995-A05D-42BF0F9CCEA4" Win64="no">
+          <File Id="odbcsetupdll" Name="odbcSetup.dll" Source="..\..\..\build-artifacts\win\snappydata\odbc\32\odbcSetup.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="odbcsetuplib" Guid="AA3B6843-9EAD-4B66-9689-C5498788AB51" Win64="no">
+          <File Id="odbcsetuplib" Name="odbcSetup.lib"  Source="..\..\..\build-artifacts\win\snappydata\odbc\32\odbcSetup.lib" Checksum="yes"/>
+        </Component>
+        <Component Id="odbcsetupexp" Guid="A8F48DFA-FCE1-4712-897D-12DE2C1E8A06" Win64="no">
+          <File Id="odbcsetupexp" Name="odbcSetup.exp"  Source="..\..\..\build-artifacts\win\snappydata\odbc\32\odbcSetup.exp" Checksum="yes"/>
+        </Component>
+        <Component Id="odbcsetuppdb" Guid="E22EFCC8-BCB3-48E7-906F-15E1B8C01C24" Win64="no">
+          <File Id="odbcsetuppdb" Name="odbcSetup.pdb"  Source="..\..\..\build-artifacts\win\snappydata\odbc\32\odbcSetup.pdb" Checksum="yes"/>
+        </Component>
+        <Component Id="snappyodbcdll" Guid="A4B4D185-90A9-49FE-9CB2-073FC250BE12" Win64="no">
+          <File Id="snappyodbcdll" Name="snappyodbc.dll"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\snappyodbc.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="snappyodbclib" Guid="EC388137-5479-4054-BEBB-515365FE1261" Win64="no">
+          <File Id="snappyodbclib" Name="snappyodbc.lib"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\snappyodbc.lib" Checksum="yes"/>
+        </Component>
+        <Component Id="snappyodbcexp" Guid="A8EF9BBA-3BA4-4987-AAD1-590A68BFBA85" Win64="no">
+          <File Id="snappyodbcexp" Name="snappyodbc.exp"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\snappyodbc.exp" Checksum="yes"/>
+        </Component>
+        <Component Id="libcryptodll" Guid="00A93BA0-B555-42E5-A566-21B98C6B9471" Win64="no">
+          <File Id="libcryptodll" Name="libcrypto-1_1.dll" Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\libcrypto-1_1.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="libcryptopdb" Guid="7F5CA5DC-EE8D-4014-AF5C-CD893FA44C6E" Win64="no">
+          <File Id="libcryptopdb" Name="libcrypto-1_1.pdb" Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\libcrypto-1_1.pdb" Checksum="yes"/>
+        </Component>
+        <Component Id="libssldll" Guid="6845E888-9DBE-47F1-A4EF-ECAC9C729BEC" Win64="no">
+          <File Id="libssldll" Name="libssl-1_1.dll"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\libssl-1_1.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="libsslpdb" Guid="BB8F9FEA-2DDC-46CD-8992-D34EDDD45E60" Win64="no">
+          <File Id="libsslpdb" Name="libssl-1_1.pdb"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\libssl-1_1.pdb" Checksum="yes"/>
+        </Component>
+        <Component Id="capidll" Guid="5A02745E-DD86-4DDC-8817-6D3AAD171279" Win64="no">
+          <File Id="capidll" Name="capi.dll"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\engines-1_1\capi.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="capipdb" Guid="FC7D29E8-1ED2-4A37-9999-6BD5E2D26795" Win64="no">
+          <File Id="capipdb" Name="capi.pdb"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\engines-1_1\capi.pdb" Checksum="yes"/>
+        </Component>
+        <Component Id="padlockdll" Guid="5F2BE28B-0D76-40C5-B685-138D46317A23" Win64="no">
+          <File Id="padlockdll" Name="padlock.dll"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\engines-1_1\padlock.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="padlockpdb" Guid="3DADC528-D6A6-4605-B128-9F38EC3A8DCE" Win64="no">
+          <File Id="padlockpdb" Name="padlock.pdb"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\engines-1_1\padlock.pdb" Checksum="yes"/>
+        </Component>
+        <!-- Well known SSL trusted certificates common to both 64 and 32 bit installs -->
+        <Component Id="sslcerts" Guid="4E228C29-3704-474F-AB6F-6A69FCA7BA8F" Win64="no">
+          <File Id="sslcerts" Name="ca-certificates.crt" Source="..\..\..\build-artifacts\win\snappyodbc\SSL\ca-certificates.crt" Checksum="yes"/>
+        </Component>
+      <?endif?>
+    </DirectoryRef>
+
+    <!-- Step 2 (contd): Debug versions -->
+    <DirectoryRef Id="APPLICATIONDEBUGFOLDER">
+      <?if $(var.Win64)="yes"?>
+      <!--64 bit installation-->
+        <Component Id="snappyodbcdbgdll" Guid="6013FB49-2411-4BD7-ABED-53BB17D85B82" Win64="yes">
+          <File Id="snappyodbcdbgdll" Name="snappyodbc.dll"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\debug\snappyodbc.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="snappyodbcdbglib" Guid="BFD9FC04-A591-4623-9643-8760F902BC2E" Win64="yes">
+          <File Id="snappyodbcdbglib" Name="snappyodbc.lib"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\debug\snappyodbc.lib" Checksum="yes"/>
+        </Component>
+        <Component Id="snappyodbcdbgexp" Guid="A630FEB6-3B49-45AC-9744-D1FAA162C2BC" Win64="yes">
+          <File Id="snappyodbcdbgexp" Name="snappyodbc.exp"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\debug\snappyodbc.exp" Checksum="yes"/>
+        </Component>
+        <Component Id="snappyodbcdbgpdb" Guid="FBA9E997-0076-417E-84A5-0B750BA7FD20" Win64="yes">
+          <File Id="snappyodbcdbgpdb" Name="snappyodbc.pdb"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\debug\snappyodbc.pdb" Checksum="yes"/>
+        </Component>
+        <Component Id="libcryptodbgdll" Guid="90F72064-8FAC-4270-ABCE-40FF5176CC6C" Win64="yes">
+          <File Id="libcryptodbgdll" Name="libcrypto-1_1-x64.dll" Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\libcrypto-1_1-x64.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="libcryptodbgpdb" Guid="20A43AA6-BBCA-4474-9364-B212D5A54361" Win64="yes">
+          <File Id="libcryptodbgpdb" Name="libcrypto-1_1-x64.pdb" Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\libcrypto-1_1-x64.pdb" Checksum="yes"/>
+        </Component>
+        <Component Id="libssldbgdll" Guid="95E308C7-8154-4D99-872A-15B3AC05761A" Win64="yes">
+          <File Id="libssldbgdll" Name="libssl-1_1-x64.dll"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\libssl-1_1-x64.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="libssldbgpdb" Guid="FBEDA6E2-D95F-4125-9CCB-D933C127F750" Win64="yes">
+          <File Id="libssldbgpdb" Name="libssl-1_1-x64.pdb"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\libssl-1_1-x64.pdb" Checksum="yes"/>
+        </Component>
+        <Component Id="capidbgdll" Guid="5C7322E6-B638-4D37-9EBC-07248F23D388" Win64="yes">
+          <File Id="capidbgdll" Name="capi.dll"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\engines-1_1\capi.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="capidbgpdb" Guid="061F9506-9D28-411A-83EF-8BB16941DF1D" Win64="yes">
+          <File Id="capidbgpdb" Name="capi.pdb"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\engines-1_1\capi.pdb" Checksum="yes"/>
+        </Component>
+        <Component Id="padlockdbgdll" Guid="0F346DF4-1661-4B6D-89AE-50326CDD3616" Win64="yes">
+          <File Id="padlockdbgdll" Name="padlock.dll"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\engines-1_1\padlock.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="padlockdbgpdb" Guid="B34A7DF7-A89E-4FB4-924F-5C9047DB2BC7" Win64="yes">
+          <File Id="padlockdbgpdb" Name="padlock.pdb"  Source="..\..\..\build-artifacts\win\snappyodbc\win64\lib\engines-1_1\padlock.pdb" Checksum="yes"/>
+        </Component>
+      <?else?>
+      <!--32 bit installation-->
+        <Component Id="snappyodbcdbgdll" Guid="FB59D933-4D71-4B65-86C5-986F7AB22E91" Win64="no">
+          <File Id="snappyodbcdbgdll" Name="snappyodbc.dll"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\debug\snappyodbc.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="snappyodbcdbglib" Guid="EACDD0D0-76C0-45D1-9837-59AE721C237B" Win64="no">
+          <File Id="snappyodbcdbglib" Name="snappyodbc.lib"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\debug\snappyodbc.lib" Checksum="yes"/>
+        </Component>
+        <Component Id="snappyodbcdbgexp" Guid="A4586718-A3FE-4A86-B2A4-A4B4A9EB0000" Win64="no">
+          <File Id="snappyodbcdbgexp" Name="snappyodbc.exp"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\debug\snappyodbc.exp" Checksum="yes"/>
+        </Component>
+        <Component Id="snappyodbcdbgpdb" Guid="B9043BC3-DC2B-4FAD-A5EF-D000492E3610" Win64="no">
+          <File Id="snappyodbcdbgpdb" Name="snappyodbc.pdb"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\debug\snappyodbc.pdb" Checksum="yes"/>
+        </Component>
+        <Component Id="libcryptodbgdll" Guid="62C598E4-2E8A-4BC7-857C-D7E2E73D1D7A" Win64="no">
+          <File Id="libcryptodbgdll" Name="libcrypto-1_1.dll" Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\libcrypto-1_1.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="libcryptodbgpdb" Guid="4E448919-5B46-490E-90C9-2FB6589BED4A" Win64="no">
+          <File Id="libcryptodbgpdb" Name="libcrypto-1_1.pdb" Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\libcrypto-1_1.pdb" Checksum="yes"/>
+        </Component>
+        <Component Id="libssldbgdll" Guid="AA19215E-579C-40EB-9AD4-57E02306B561" Win64="no">
+          <File Id="libssldbgdll" Name="libssl-1_1.dll"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\libssl-1_1.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="libssldbgpdb" Guid="70AE82D3-BCCA-47EA-BF3E-664BC5D74197" Win64="no">
+          <File Id="libssldbgpdb" Name="libssl-1_1.pdb"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\libssl-1_1.pdb" Checksum="yes"/>
+        </Component>
+        <Component Id="capidbgdll" Guid="8E2FBE40-E038-47E4-AA1A-81B334D583E6" Win64="no">
+          <File Id="capidbgdll" Name="capi.dll"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\engines-1_1\capi.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="capidbgpdb" Guid="7ADF55BD-758A-44DC-B8ED-6F495AD0ADBC" Win64="no">
+          <File Id="capidbgpdb" Name="capi.pdb"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\engines-1_1\capi.pdb" Checksum="yes"/>
+        </Component>
+        <Component Id="padlockdbgdll" Guid="7ED912CE-9FEB-4176-87E0-035995EBBA97" Win64="no">
+          <File Id="padlockdbgdll" Name="padlock.dll"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\engines-1_1\padlock.dll" Checksum="yes"/>
+        </Component>
+        <Component Id="padlockdbgpdb" Guid="1741A3BB-BCD8-41E9-B8B6-0E8A23FB6F44" Win64="no">
+          <File Id="padlockdbgpdb" Name="padlock.pdb"  Source="..\..\..\build-artifacts\win\snappyodbc\win32\lib\engines-1_1\padlock.pdb" Checksum="yes"/>
+        </Component>
+      <?endif?>
+    </DirectoryRef>
+
+    <!--Step 3: Write a registry entry for driver-->
+    <DirectoryRef Id="TARGETDIR">
+      <Component Id="RegistryEntries" Guid='$(var.RegistryComponentGUID)' Win64='$(var.Win64)'>
+        <RegistryKey Root="HKLM" Key="$(var.RegistryPrefix)\ODBCINST.INI\ODBC Drivers">
+          <RegistryValue Type="string" Name="$(var.ProductNameForRegistyEntry)" Value="Installed" KeyPath="yes"/>
+        </RegistryKey>
+        <RegistryKey Root="HKLM" Key="$(var.RegistryPrefix)\ODBCINST.INI\$(var.ProductNameForRegistyEntry)">
+          <RegistryValue Type="string" Name="Description" Value="SnappyData ODBC Driver" />
+          <RegistryValue Type="string" Name="Driver" Value="[APPLICATIONFOLDER]snappyodbc.dll" />
+          <RegistryValue Type="string" Name="Setup" Value="[APPLICATIONFOLDER]odbcSetup.dll" />
+          <RegistryValue Type="string" Name="DriverODBCVer" Value="03.52" />
+          <RegistryValue Type="string" Name="APILevel" Value="1" />
+          <RegistryValue Type="string" Name="ConnectFunctions" Value="YYN" />
+          <RegistryValue Type="string" Name="FileUsage" Value="0" />
+          <RegistryValue Type="string" Name="SQLLevel" Value="0" />
+        </RegistryKey>
+        <RemoveFolder Id="RegistryEntries" On="uninstall"/>
+      </Component>
+    </DirectoryRef>
+
+    <!--Step 4: Add C++ redistributable Visual Studio 2019-->
+    <DirectoryRef Id="TARGETDIR">
+      <Merge Id="VCRedist_2019" SourceFile="..\..\..\merge-modules\$(var.VCRedistFileName)" Language="0" DiskId="1"/>
+    </DirectoryRef>
+
+    <!--Step 5: Tell Wix to install the files-->
+    <Feature Id="ProductFeature" Title="SnappyData ODBC Driver" Level="1">
+      <ComponentRef Id="odbcsetupdll"/>
+      <ComponentRef Id="odbcsetuplib"/>
+      <ComponentRef Id="odbcsetupexp"/>
+      <ComponentRef Id="odbcsetuppdb"/>
+      <ComponentRef Id="snappyodbcdll"/>
+      <ComponentRef Id="snappyodbclib"/>
+      <ComponentRef Id="snappyodbcexp"/>
+      <ComponentRef Id="libcryptodll"/>
+      <ComponentRef Id="libcryptopdb"/>
+      <ComponentRef Id="libssldll"/>
+      <ComponentRef Id="libsslpdb"/>
+      <ComponentRef Id="capidll"/>
+      <ComponentRef Id="capipdb"/>
+      <ComponentRef Id="padlockdll"/>
+      <ComponentRef Id="padlockpdb"/>
+      <ComponentRef Id="sslcerts"/>
+      <ComponentRef Id="snappyodbcdbgdll"/>
+      <ComponentRef Id="snappyodbcdbglib"/>
+      <ComponentRef Id="snappyodbcdbgexp"/>
+      <ComponentRef Id="snappyodbcdbgpdb"/>
+      <ComponentRef Id="libcryptodbgdll"/>
+      <ComponentRef Id="libcryptodbgpdb"/>
+      <ComponentRef Id="libssldbgdll"/>
+      <ComponentRef Id="libssldbgpdb"/>
+      <ComponentRef Id="capidbgdll"/>
+      <ComponentRef Id="capidbgpdb"/>
+      <ComponentRef Id="padlockdbgdll"/>
+      <ComponentRef Id="padlockdbgpdb"/>
+      <ComponentRef Id="RegistryEntries"/>
+    </Feature>
+
+    <!--Step 6: Tell Wix to install the C++ 2019 redistributable -->
+    <Feature Id="VCRedist" Title="Microsoft C++ 2019 redistributable" Display="hidden" Level="1" AllowAdvertise="no">
+      <MergeRef Id="VCRedist_2019"/>
+    </Feature>
+
+    <Icon Id="icon_1" SourceFile="..\..\..\SnappyData-logo.ico"/>
+    <!--change icon for control pandel- Add or remove program-->
+    <Property Id="ARPPRODUCTICON" Value="icon_1" />
+    <!--Change the logo in the welcome and completion dialog-->
+    <WixVariable Id="WixUIDialogBmp" Value="..\..\..\SnappyData-dialog.png" />
+    <WixVariable Id="WixUIBannerBmp" Value="..\..\..\SnappyData-banner.png"/>
+    <WixVariable Id="WixUIExclamationIco" Value="..\..\..\SnappyData-logo.ico"/>
+    <WixVariable Id="WixUIInfoIco" Value="..\..\..\SnappyData-logo.ico"/>
+    <!--
+    <WixVariable Id="WixUINewIco" Value="..\..\..\SnappyData-logo.ico"/>
+    <WixVariable Id="WixUIUpIco" Value="..\..\..\SnappyData-logo.ico"/>
+	-->
+    <WixVariable Id="WixUILicenseRtf" Value="..\..\..\LICENSE.rtf" />
+
+    <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER"/>
+    <UI>
+      <UIRef Id="WixUI_InstallDir"/>
+      <!--
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg">1</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
+      -->
+    </UI>
+
+  </Product>
+
+</Wix>

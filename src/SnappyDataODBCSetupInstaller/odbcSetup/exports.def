@@ -1,0 +1,10 @@
+LIBRARY	"odbcSetup"
+
+
+SECTIONS
+
+EXPORTS
+
+
+    ConfigDSN               @1
+    ConfigDriver			@2

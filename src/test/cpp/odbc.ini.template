@@ -1,0 +1,31 @@
+[ODBC Data Sources]
+snappydsn = TIBCO ComputeDB ODBC Driver
+snappydsndbg = SnappyData Debug
+
+[snappydsn]
+Driver = TIBCO ComputeDB ODBC Driver
+Description = SnappyData cluster
+Server = <server-host>
+Port = <server-port>
+UID = snappyodbc
+Password = snappyodbc
+;Password = odbc:pass2
+;LogFile = snappyodbc.log
+AutoReconnect = false
+CredentialManager = false
+LoadBalance = true
+SSLMode = false
+;SSLProperties = truststore=/path/to/truststore.pem,client-auth=true,keystore=/path/to/client-keystore.pem,keystore-password=odbc:key,certificate=/path/to/client-keystore.pem
+
+[snappydsndbg]
+Driver = SnappyData Debug
+Description = SnappyData cluster
+Server = <server-host>
+Port = <server-port>
+UID = snappyodbc
+Password = snappyodbc
+;LogFile = snappyodbc.log
+AutoReconnect = false
+CredentialManager = false
+LoadBalance = true
+SSLMode = false

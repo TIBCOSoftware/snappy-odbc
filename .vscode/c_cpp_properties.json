@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "${workspaceFolder}",
+                "${workspaceFolder}/../snappydata/store/native/src/snappyclient/headers",
+                "${workspaceFolder}/../snappydata/store/native/dist/boost-1.76.0/include",
+                "${workspaceFolder}/../snappydata/store/native/dist/thrift-0.14.1/include",
+                "${workspaceFolder}/../snappydata/store/native/dist/googletest-1.10.0/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c99",
+            "cppStandard": "c++11",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}

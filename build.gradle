@@ -1,0 +1,618 @@
+/*
+ * Copyright (c) 2017 SnappyData, Inc. All rights reserved.
+ */
+import org.gradle.api.tasks.testing.logging.*
+import org.gradle.internal.logging.*
+
+apply plugin: 'wrapper'
+apply plugin: 'cpp'
+apply plugin: 'java'
+apply plugin: 'google-test-test-suite'
+apply plugin: 'visual-studio'
+apply plugin: 'windows-resources'
+
+String majorVersion = '1'
+String minorVersion = '3'
+String patchVersion = '0'
+String fullVersion = '01.03.0000'
+String fullSnappyStoreVersion = '01.06.0600'
+
+String shortVersion = "${majorVersion}.${minorVersion}"
+version = "${shortVersion}.${patchVersion}"
+
+String buildDate = new Date().format('yyyy-MM-dd HH:mm:ss Z')
+String osName = System.properties['os.name']
+osName = osName.substring(0, 3).toLowerCase()
+buildRoot = buildRoot.trim()
+if (!buildRoot.isEmpty()) {
+  buildDir = new File(buildRoot, osName + '/' +  project.path.replace(':', '/'))
+} else {
+  buildDir = 'build-artifacts/' + osName
+}
+String gradlew = osName == 'win' ? './gradlew.bat' : './gradlew'
+
+
+String thriftVersion = '0.14.1'
+String boostVersion = '1.76.0'
+String mpirVersion = '2.7.2'
+String opensslVersion = '1.1.1k'
+String googletestVersion = '1.10.0'
+
+String productDir = "${rootProject.buildDir}/snappyodbc"
+String clientDriverDir = "${rootProject.buildDir}/snappyclient"
+String snappyStore = System.env.SNAPPYSTORE
+if (snappyStore == null || snappyStore.length() == 0) {
+  snappyStore = "${projectDir}/../snappydata/store"
+}
+String snappyStoreNative = "${snappyStore}/native"
+String distDir = "${snappyStoreNative}/dist"
+
+def boostLibs = [ 'boost_chrono', 'boost_date_time', 'boost_filesystem',
+                  'boost_system', 'boost_thread' ]
+
+def getArch = { Platform platform ->
+  return (platform == platforms.x64) ? "${osName}64" : "${osName}32"
+}
+def getArchDir = { String libName, String libVersion, String libDir,
+    Platform platform ->
+  return libVersion.isEmpty() ? "${libDir}/${getArch(platform)}"
+      : "${libDir}/${libName}-${libVersion}/${getArch(platform)}"
+}
+def getBuildTypeLibDir = { String libDir, BuildType buildType ->
+  if (buildType == buildTypes.debug) {
+    String debugLibDir = "${libDir}/debug"
+    if (file(debugLibDir).exists()) {
+      return debugLibDir
+    }
+  }
+  return libDir
+}
+def getLibPathForPlatform = { String libName, String distName, String libVersion,
+    String libDir, boolean isStatic, boolean isBoost,
+    BuildType buildType, Platform platform ->
+  def os = platform.operatingSystem
+  String archDir = getArchDir(distName, libVersion, libDir, platform)
+  if (os.windows) {
+    String extension = isStatic ? 'lib' : 'dll'
+    if (isBoost) {
+      String platformName = (platform == platforms.x64) ? '64' : '32'
+      String suffix = "vc142-mt-x${platformName}-1_76"
+      if (buildType == buildTypes.debug) suffix = "vc142-mt-gd-x${platformName}-1_76"
+      if (isStatic) libName = "lib${libName}"
+      return "${archDir}/lib/${libName}-${suffix}.${extension}"
+    } else {
+      String extDir = isStatic ? 'lib' : 'bin'
+      String libLoc = getBuildTypeLibDir("${archDir}/${extDir}", buildType)
+      String suffix = ''
+      if (buildType == buildTypes.debug) suffix = 'd'
+      String libFiled = "${libLoc}/${libName}${suffix}.${extension}"
+      String libFile = "${libLoc}/lib${libName}.${extension}"
+      if (file(libFiled).exists()) {
+        return libFiled
+      } else if (file(libFile).exists()) {
+        return libFile
+      } else {
+        return "${libLoc}/${libName}.${extension}"
+      }
+    }
+  } else if (isStatic) {
+    return getBuildTypeLibDir("${archDir}/lib", buildType) + "/lib${libName}.a"
+  } else if (os.macOsX) {
+    return getBuildTypeLibDir("${archDir}/lib", buildType) + "/lib${libName}.dylib"
+  } else {
+    return getBuildTypeLibDir("${archDir}/lib", buildType) + "/lib${libName}.so"
+  }
+}
+
+def copyOpenSSLToProduct = { Platform platform, String platformName ->
+  String archDir = getArchDir('openssl', opensslVersion, distDir, platform)
+  String dllDir = archDir + '/bin'
+  String libDir = archDir + '/lib'
+  String certDir = archDir + '/../conf/certs'
+  copy {
+    from dllDir
+    into "${productDir}/${osName}${platformName}/lib"
+    include 'lib*'
+  }
+  copy {
+    from libDir
+    into "${productDir}/${osName}${platformName}/lib"
+    include 'engines-*/**'
+  }
+  copy {
+    from certDir
+    into "${productDir}/SSL"
+    include 'ca-certificates.crt'
+  }
+  String debugDllDir = dllDir + '/debug'
+  String debugLibDir = libDir + '/debug'
+  if (!file(debugDllDir).exists()) {
+    debugDllDir = dllDir
+  }
+  if (!file(debugLibDir).exists()) {
+    debugLibDir = libDir
+  }
+  copy {
+    from debugDllDir
+    into "${productDir}/${osName}${platformName}/lib/debug"
+    include 'lib*'
+  }
+  copy {
+    from debugLibDir
+    into "${productDir}/${osName}${platformName}/lib/debug"
+    include 'engines-*/**'
+  }
+}
+
+
+// ODBC client
+model {
+  buildTypes {
+    debug
+    release
+  }
+  platforms {
+    x86 {
+      architecture "x86"
+    }
+    x64 {
+      architecture "x86_64"
+    }
+  }
+  repositories {
+    libs(PrebuiltLibraries) { libs ->
+      boost {
+        headers.srcDir "${distDir}/boost-${boostVersion}/include"
+      }
+      boostLibs.each { boostLib ->
+        libs.create(boostLib) {
+          binaries.withType(StaticLibraryBinary) {
+            staticLibraryFile = file(getLibPathForPlatform(boostLib, 'boost',
+                  boostVersion, distDir, true, true, buildType, targetPlatform))
+          }
+        }
+      }
+      snappyclient {
+        binaries.withType(StaticLibraryBinary) {
+          headers.srcDir "${clientDriverDir}/include"
+          staticLibraryFile = file(getLibPathForPlatform('snappyclient',
+                'snappyclient', '', clientDriverDir, true, false,
+                buildType, targetPlatform))
+        }
+      }
+      thrift {
+        binaries.withType(StaticLibraryBinary) {
+          staticLibraryFile = file(getLibPathForPlatform('thrift', 'thrift',
+                thriftVersion, distDir, true, false, buildType, targetPlatform))
+        }
+      }
+      openssl_crypto {
+        binaries.withType(SharedLibraryBinary) {
+          sharedLibraryFile = file(getLibPathForPlatform('libcrypto', 'openssl',
+                opensslVersion, distDir, false, false, buildType, targetPlatform))
+          sharedLibraryLinkFile = file(getLibPathForPlatform('libcrypto', 'openssl',
+                opensslVersion, distDir, true, false, buildType, targetPlatform))
+        }
+        /*
+        binaries.withType(StaticLibraryBinary) {
+          staticLibraryFile = file(getLibPathForPlatform('libcrypto', 'openssl',
+                opensslVersion, distDir, true, false, buildType, targetPlatform))
+        }
+        */
+      }
+      openssl {
+        binaries.withType(SharedLibraryBinary) {
+          sharedLibraryFile = file(getLibPathForPlatform('libssl', 'openssl',
+                opensslVersion, distDir, false, false, buildType, targetPlatform))
+          sharedLibraryLinkFile = file(getLibPathForPlatform('libssl', 'openssl',
+                opensslVersion, distDir, true, false, buildType, targetPlatform))
+        }
+        /*
+        binaries.withType(StaticLibraryBinary) {
+          staticLibraryFile = file(getLibPathForPlatform('libssl', 'openssl',
+                opensslVersion, distDir, true, false, buildType, targetPlatform))
+        }
+        */
+      }
+      mpir {
+        binaries.withType(StaticLibraryBinary) {
+          headers.srcDir getArchDir('mpir', mpirVersion, distDir, targetPlatform) + '/include'
+          staticLibraryFile = file(getLibPathForPlatform('mpir', 'mpir',
+                mpirVersion, distDir, true, false, buildType, targetPlatform))
+        }
+      }
+      googletest {
+        binaries.withType(StaticLibraryBinary) {
+          headers.srcDir "${distDir}/googletest-${googletestVersion}/include"
+          staticLibraryFile = file(getLibPathForPlatform('gtest',
+                'googletest', googletestVersion, distDir, true, false,
+                buildType, targetPlatform))
+        }
+      }
+      googletest_main {
+        binaries.withType(StaticLibraryBinary) {
+          staticLibraryFile = file(getLibPathForPlatform('gtest_main',
+                'googletest', googletestVersion, distDir, true, false,
+                buildType, targetPlatform))
+        }
+      }
+    }
+  }
+
+  binaries {
+    all {
+      // Define toolchain-specific compiler and linker options
+      if (toolChain in Gcc) {
+        cppCompiler.define 'PIC'
+        cppCompiler.define "ODBC_DRIVER_VERSION=\"${fullVersion}\""
+        cppCompiler.define "SNAPPY_DBMS_VERSION=\"${fullSnappyStoreVersion}\""
+        cppCompiler.args '-Wall', '-Wno-unused-local-typedefs',
+                         '-fPIC', '-std=c++11'
+        if (buildType == buildTypes.debug) {
+          cppCompiler.define '_DEBUG'
+          cppCompiler.args '-g', '-O0'
+        } else {
+          cppCompiler.args '-g', '-O2'
+        }
+
+        if (rootProject.hasProperty('iodbc')) {
+          cppCompiler.define 'IODBC'
+          def inc = new ByteArrayOutputStream()
+          exec {
+            commandLine 'iodbc-config', '--cflags'
+            standardOutput = inc
+          }
+          cppCompiler.args inc.toString().trim()
+          linker.args '-liodbcinst'
+        } else {
+          linker.args '-lodbcinst'
+        }
+        linker.args '-lcrypto', '-lssl', '-lgmp', '-lpthread', '-lrt',
+                    '-rdynamic', '-ldl', '-z', 'defs'
+      } else if (toolChain in VisualCpp) {
+        cppCompiler.define 'DLLBUILD'
+        cppCompiler.define '_USRDLL'
+        cppCompiler.define '_WINDLL'
+        cppCompiler.define '_WINDOWS'
+        cppCompiler.define "ODBC_DRIVER_VERSION=\"${fullVersion}\""
+        cppCompiler.define "SNAPPY_DBMS_VERSION=\"${fullSnappyStoreVersion}\""
+
+        cppCompiler.args '/permissive-', '/W3', '/WX', '/FS', '/Zc:inline', '/EHsc', '/Gd',
+                         '/sdl', '/nologo', '/diagnostics:column', '/errorReport:prompt'
+        if (buildType == buildTypes.debug) {
+          cppCompiler.define '_DEBUG'
+          cppCompiler.args '/JMC', '/Od', '/ZI', '/RTC1', '/MDd'
+          linker.args '/DEBUG'
+        } else {
+          cppCompiler.args '/O2', '/Gy', '/Oi', '/Zi', '/MD'
+          linker.args '/OPT:REF', '/INCREMENTAL:NO', '/OPT:ICF'
+        }
+        linker.args 'odbccp32.lib', 'legacy_stdio_definitions.lib', 'user32.lib'
+      }
+    }
+  }
+
+  components {
+    snappyodbc(NativeLibrarySpec) {
+      targetPlatform 'x64'
+      if (bothArch == '1') {
+        targetPlatform 'x86'
+      }
+      sources {
+        rc {
+          source {
+            srcDirs 'src/driver'
+            include 'snappyodbc.rc'
+          }
+        }
+        cpp {
+          source {
+            srcDir 'src/driver'
+            include '**/*.cpp'
+          }
+          lib library: 'snappyclient', linkage: 'static'
+          lib library: 'thrift', linkage: 'static'
+          lib library: 'boost', linkage: 'api'
+          boostLibs.each { boostLib ->
+            lib library: boostLib, linkage: 'static'
+          }
+          if (osName == 'win') {
+            lib library: 'mpir', linkage: 'static'
+            lib library: 'openssl_crypto', linkage: 'shared'
+            lib library: 'openssl', linkage: 'shared'
+          }
+        }
+      }
+      // build only shared libraries
+      binaries.withType(StaticLibraryBinarySpec) {
+        buildable = false
+      }
+      binaries {
+        all {
+          if (toolChain in Gcc) {
+            linker.args "-Wl,--version-script,${projectDir}/src/driver/snappyodbc.ver"
+          } else if (toolChain in VisualCpp) {
+            linker.args '/ERRORREPORT:PROMPT', '/NOLOGO', "/DEF:${projectDir}/src/driver/snappyodbc.def"
+          }
+        }
+      }
+    }
+    snappyodbcDummy(NativeLibrarySpec) {
+      targetPlatform 'x64'
+      if (bothArch == '1') {
+        targetPlatform 'x86'
+      }
+      sources {
+        cpp {
+          source {
+            srcDir 'src/driver'
+            include '**/Dummy.cpp'
+          }
+        }
+      }
+      // build only shared libraries
+      binaries.withType(StaticLibraryBinarySpec) {
+        buildable = false
+      }
+    }
+  }
+
+  testSuites {
+    snappyodbcTest(GoogleTestTestSuiteSpec) {
+      if (rootProject.hasProperty('direct')) {
+        testing $.components.snappyodbc
+      } else {
+        testing $.components.snappyodbcDummy
+      }
+      sources {
+        cpp {
+          source {
+            srcDir 'src/test'
+            include '**/*.cpp'
+          }
+          if (rootProject.hasProperty('direct')) {
+            lib library: 'snappyclient', linkage: 'static'
+            lib library: 'thrift', linkage: 'static'
+          } else {
+            lib library: 'snappyclient', linkage: 'api'
+          }
+          lib library: 'boost', linkage: 'api'
+          boostLibs.each { boostLib ->
+            lib library: boostLib, linkage: 'static'
+          }
+        }
+      }
+    }
+  }
+  binaries {
+    withType(GoogleTestTestSuiteBinarySpec) {
+      lib library: 'googletest', linkage: 'static'
+      if (osName == 'win') {
+        lib library: 'googletest_main', linkage: 'static'
+      }
+      if (toolChain in Gcc) {
+        cppCompiler.args '-pthread'
+        linker.args '-pthread'
+        if (rootProject.hasProperty('direct')) {
+          cppCompiler.define 'TEST_DIRECT'
+        } else if (rootProject.hasProperty('iodbc')) {
+          linker.args '-liodbc'
+        } else {
+          linker.args '-lodbc'
+        }
+      } else if (toolChain in VisualCpp) {
+        cppCompiler.define '_CRT_SECURE_NO_WARNINGS'
+        cppCompiler.args '/Wv:18'
+        linker.args '/SUBSYSTEM:CONSOLE'
+        if (rootProject.hasProperty('direct')) {
+          cppCompiler.define 'TEST_DIRECT'
+        } else {
+          linker.args 'odbc32.lib'
+        }
+      }
+    }
+  }
+}
+
+String serverHost = 'localhost'
+if (rootProject.hasProperty('server')) {
+  serverHost = server
+}
+String serverPort = '1527'
+
+String buildLib64Prefix = "${buildDir}/libs/snappyodbc/shared"
+String buildLib32Prefix = "${buildDir}/libs/snappyodbc/shared/x86"
+if (bothArch == '1') {
+  buildLib64Prefix = "${buildLib64Prefix}/x64"
+}
+
+task createOdbcConfigs {
+  doLast {
+    copy {
+      from "${projectDir}/src/test/cpp"
+      into buildLib64Prefix
+      include 'odbc*.ini.template'
+      rename { it.replaceAll('.template$', '') }
+      filter { line ->
+        line.replace('<driver-path>', "${buildLib64Prefix}/release/libsnappyodbc.so")
+            .replace('<debug-driver-path>', "${buildLib64Prefix}/debug/libsnappyodbc.so")
+            .replace('<server-host>', serverHost)
+            .replace('<server-port>', serverPort)
+      }
+    }
+    // create separate ini files for 32-bit if required
+    if (bothArch == '1') {
+      copy {
+        from "${projectDir}/src/test/cpp"
+        into buildLib32Prefix
+        include 'odbc*.ini.template'
+        rename { it.replaceAll('.template$', '') }
+        filter { line ->
+          line.replace('<driver-path>', "${buildLib32Prefix}/release/libsnappyodbc.so")
+              .replace('<debug-driver-path>', "${buildLib32Prefix}/debug/libsnappyodbc.so")
+              .replace('<server-host>', serverHost)
+              .replace('<server-port>', serverPort)
+        }
+      }
+    }
+  }
+}
+
+// build the C++ client driver and copy the artifacts
+task clientBuild {
+  if (!'skip'.equalsIgnoreCase(rootProject.findProperty('client'))) {
+    dependsOn ':snappydata-native:clientProduct'
+    doLast {
+      copy {
+        from "${project(':snappydata-native').buildDir}/snappyclient"
+        into clientDriverDir
+      }
+    }
+  }
+}
+
+task resourceBuild {
+  doLast {
+    [ "${projectDir}/src/driver", "${projectDir}/src/SnappyDataODBCSetupInstaller/odbcSetup" ].each { resourceDir ->
+      copy {
+        from resourceDir
+        into resourceDir
+        include '*.rc.in'
+        rename { it.replaceAll('.in$', '') }
+        filter { line ->
+          line.replace('@DRIVER_SHORT_VERSION@', shortVersion).
+            replace('@DRIVER_MAJOR_VERSION@', majorVersion).
+            replace('@DRIVER_MINOR_VERSION@', minorVersion).
+            replace('@DRIVER_PATCH_VERSION@', patchVersion).
+            replace('@DRIVER_VERSION@', version)
+        }
+      }
+    }
+  }
+}
+
+tasks.withType(CppCompile) {
+  if (name.startsWith('compileSnappyodbcX64') ||
+      name.startsWith('compileSnappyodbcX86') ||
+      name.startsWith('compileSnappyodbcRelease') ||
+      name.startsWith('compileSnappyodbcDebug')) {
+    dependsOn clientBuild, resourceBuild
+  }
+}
+
+tasks.withType(RunTestExecutable) {
+  dependsOn createOdbcConfigs
+  outputs.upToDateWhen { false }
+  args '--gtest_output=xml:testOutput.xml'
+  String iniDir = buildLib64Prefix
+  if (name.contains('86') && !name.contains('86_64')) {
+    iniDir = buildLib32Prefix
+  }
+  environment 'SNAPPYODBC_TESTSJAR': "${packageTests.archivePath}",
+              'SERVERHOST': serverHost,
+              'ODBCINI': "${iniDir}/odbc.ini"
+  if (rootProject.hasProperty('iodbc')) {
+    environment 'ODBCINSTINI': "${iniDir}/odbcinst.ini"
+  } else {
+    environment 'ODBCSYSINI': iniDir
+  }
+}
+def testFilter = System.getProperty('test.filter')
+if (testFilter != null && testFilter.length() > 0) {
+  tasks.withType(RunTestExecutable) {
+    args "--gtest_filter=${testFilter}"
+  }
+}
+
+// java procedures for tests
+repositories {
+  mavenCentral()
+}
+dependencies {
+  testCompile 'io.snappydata:snappydata-store-core:1.6.5'
+}
+task packageTests(type: Jar, dependsOn: testClasses) {
+  from sourceSets.test.output
+  description 'Assembles a jar archive of test classes.'
+  baseName = 'snappyodbc'
+  classifier = 'tests'
+}
+
+assemble.dependsOn clientBuild, packageTests
+clean.dependsOn ':snappydata-native:clean'
+
+task product {
+  dependsOn assemble
+
+  doFirst {
+    delete productDir
+    file(productDir).mkdirs()
+  }
+
+  doLast {
+    // when both 32-bit and 64-bit are built, then use arch specific dirs
+
+    // copy 64-bit release and debug libraries
+    copy {
+      from "${buildLib64Prefix}/release"
+      into "${productDir}/${osName}64/lib"
+    }
+    copy {
+      from "${buildLib64Prefix}/debug"
+      into "${productDir}/${osName}64/lib/debug"
+    }
+    // copy 32-bit release and debug libraries if required
+    if (bothArch == '1') {
+      copy {
+        from "${buildLib32Prefix}/release"
+        into "${productDir}/${osName}32/lib"
+      }
+      copy {
+        from "${buildLib32Prefix}/debug"
+        into "${productDir}/${osName}32/lib/debug"
+      }
+      // copy the 32-bit OpenSSL dll's on Windows
+      if (osName == 'win') {
+        copyOpenSSLToProduct(platforms.x86, '32')
+      }
+    }
+    // copy the 64-bit OpenSSL dll's on Windows
+    if (osName == 'win') {
+      copyOpenSSLToProduct(platforms.x64, '64')
+    }
+  }
+}
+
+product.mustRunAfter clean
+build.mustRunAfter clean
+
+task precheckin {
+  dependsOn clean, product, build
+}
+
+// log build output to buildOutput.log
+
+def buildOutput = new File("${rootDir}/buildOutput.log")
+
+// delete build output file if it has become large
+if (buildOutput.length() > 1000000) {
+  delete buildOutput
+}
+
+gradle.services.get(LoggingOutputInternal).addStandardOutputListener (new StandardOutputListener () {
+  void onOutput(CharSequence output) {
+    buildOutput << output
+  }
+})
+
+gradle.services.get(LoggingOutputInternal).addStandardErrorListener (new StandardOutputListener () {
+  void onOutput(CharSequence output) {
+    buildOutput << output
+  }
+})
+
+println()
+println('-------------------------------------------------')
+println("Starting new build on ${buildDate}")
+println('-------------------------------------------------')
+println()

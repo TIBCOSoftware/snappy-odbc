@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="4.0">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <Keyword>MakeFileProj</Keyword>
+    <ProjectGUID>{A8DEDC4D-57E7-3433-B2BC-82CDC688E0E6}</ProjectGUID>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <OutDir>.vs\snappyodbc\$(Configuration)</OutDir>
+    <IntDir>.vs\snappyodbc\$(Configuration)</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <OutDir>.vs\snappyodbc\$(Configuration)</OutDir>
+    <IntDir>.vs\snappyodbc\$(Configuration)</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <OutDir>.vs\snappyodbc\$(Configuration)</OutDir>
+    <IntDir>.vs\snappyodbc\$(Configuration)</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <OutDir>.vs\snappyodbc\$(Configuration)</OutDir>
+    <IntDir>.vs\snappyodbc\$(Configuration)</IntDir>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="NMakeConfiguration" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <NMakeBuildCommandLine>gradlew.bat :clientBuild :snappyodbcX86ReleaseSharedLibrary -PbothArch=1</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>gradlew.bat :clean -PbothArch=1</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>gradlew.bat :clean :clientBuild :snappyodbcX86ReleaseSharedLibrary -PbothArch=1</NMakeReBuildCommandLine>
+    <NMakePreprocessorDefinitions>DLLBUILD</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath>src\driver\cpp;..\snappydata\store\native\src\snappyclient\headers;..\snappydata\store\native\dist\boost-1.76.0\include;..\snappydata\store\native\dist\mpir-2.7.2\win32\include</NMakeIncludeSearchPath>
+    <NMakeOutput>build-artifacts\win\libs\snappyodbc\shared\x86\release\snappyodbc.dll</NMakeOutput>
+  </PropertyGroup>
+  <PropertyGroup Label="NMakeConfiguration" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <NMakeBuildCommandLine>gradlew.bat :clientBuild :snappyodbcX86DebugSharedLibrary -PbothArch=1</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>gradlew.bat :clean -PbothArch=1</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>gradlew.bat :clean :clientBuild :snappyodbcX86DebugSharedLibrary -PbothArch=1</NMakeReBuildCommandLine>
+    <NMakePreprocessorDefinitions>DLLBUILD;_DEBUG</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath>src\driver\cpp;..\snappydata\store\native\src\snappyclient\headers;..\snappydata\store\native\dist\boost-1.76.0\include;..\snappydata\store\native\dist\mpir-2.7.2\win32\include</NMakeIncludeSearchPath>
+    <NMakeOutput>build-artifacts\win\libs\snappyodbc\shared\x86\debug\snappyodbc.dll</NMakeOutput>
+  </PropertyGroup>
+  <PropertyGroup Label="NMakeConfiguration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <NMakeBuildCommandLine>gradlew.bat :clientBuild :snappyodbcX64ReleaseSharedLibrary -PbothArch=1</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>gradlew.bat :clean -PbothArch=1</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>gradlew.bat :clean :clientBuild :snappyodbcX64ReleaseSharedLibrary -PbothArch=1</NMakeReBuildCommandLine>
+    <NMakePreprocessorDefinitions>DLLBUILD</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath>src\driver\cpp;..\snappydata\store\native\src\snappyclient\headers;..\snappydata\store\native\dist\boost-1.76.0\include;..\snappydata\store\native\dist\mpir-2.7.2\win64\include</NMakeIncludeSearchPath>
+    <NMakeOutput>build-artifacts\win\libs\snappyodbc\shared\x64\release\snappyodbc.dll</NMakeOutput>
+  </PropertyGroup>
+  <PropertyGroup Label="NMakeConfiguration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <NMakeBuildCommandLine>gradlew.bat :clientBuild :snappyodbcX64DebugSharedLibrary -PbothArch=1</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>gradlew.bat :clean -PbothArch=1</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>gradlew.bat :clean :clientBuild :snappyodbcX64DebugSharedLibrary -PbothArch=1</NMakeReBuildCommandLine>
+    <NMakePreprocessorDefinitions>DLLBUILD;_DEBUG</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath>src\driver\cpp;..\snappydata\store\native\src\snappyclient\headers;..\snappydata\store\native\dist\boost-1.76.0\include;..\snappydata\store\native\dist\mpir-2.7.2\win64\include</NMakeIncludeSearchPath>
+    <NMakeOutput>build-artifacts\win\libs\snappyodbc\shared\x64\debug\snappyodbc.dll</NMakeOutput>
+  </PropertyGroup>
+  <ItemGroup Label="Sources">
+    <ClCompile Include="build.gradle" />
+    <ClCompile Include="src\driver\cpp\DriverBase.cpp" />
+    <ClCompile Include="src\driver\cpp\DriverSetup.cpp" />
+    <ClCompile Include="src\driver\cpp\Library.cpp" />
+    <ClCompile Include="src\driver\cpp\OdbcIniKeys.cpp" />
+    <ClCompile Include="src\driver\cpp\SnappyConnection.cpp" />
+    <ClCompile Include="src\driver\cpp\SnappyDefaults.cpp" />
+    <ClCompile Include="src\driver\cpp\SnappyDescriptor.cpp" />
+    <ClCompile Include="src\driver\cpp\SnappyDriverAPIs.cpp" />
+    <ClCompile Include="src\driver\cpp\SnappyEnvironment.cpp" />
+    <ClCompile Include="src\driver\cpp\SnappyStatement.cpp" />
+    <ClCompile Include="src\driver\cpp\StringFunctions.cpp" />
+  </ItemGroup>
+  <ItemGroup Label="Headers">
+    <ClInclude Include="src\driver\cpp\ArrayIterator.h" />
+    <ClInclude Include="src\driver\cpp\ConnStringPropertyReader.h" />
+    <ClInclude Include="src\driver\cpp\DriverBase.h" />
+    <ClInclude Include="src\driver\cpp\IniPropertyReader.h" />
+    <ClInclude Include="src\driver\cpp\Library.h" />
+    <ClInclude Include="src\driver\cpp\OdbcBase.h" />
+    <ClInclude Include="src\driver\cpp\OdbcIniKeys.h" />
+    <ClInclude Include="src\driver\cpp\PropertyReader.h" />
+    <ClInclude Include="src\driver\cpp\SnappyConnection.h" />
+    <ClInclude Include="src\driver\cpp\SnappyDefaults.h" />
+    <ClInclude Include="src\driver\cpp\SnappyDescriptor.h" />
+    <ClInclude Include="src\driver\cpp\SnappyEnvironment.h" />
+    <ClInclude Include="src\driver\cpp\SnappyStatement.h" />
+    <ClInclude Include="src\driver\cpp\StringFunctions.h" />
+  </ItemGroup>
+  <ItemGroup Label="References">
+    <None Include=".clang-format" />
+    <None Include="docs\Building.md" />
+    <None Include="README.md" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

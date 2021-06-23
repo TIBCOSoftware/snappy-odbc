@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="4.0">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <Keyword>MakeFileProj</Keyword>
+    <ProjectGUID>{EA06630E-B35C-38E1-822C-5FB1936304A4}</ProjectGUID>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <OutDir>.vs\snappyodbcTestExe\$(Configuration)</OutDir>
+    <IntDir>.vs\snappyodbcTestExe\$(Configuration)</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <OutDir>.vs\snappyodbcTestExe\$(Configuration)</OutDir>
+    <IntDir>.vs\snappyodbcTestExe\$(Configuration)</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <OutDir>.vs\snappyodbcTestExe\$(Configuration)</OutDir>
+    <IntDir>.vs\snappyodbcTestExe\$(Configuration)</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <OutDir>.vs\snappyodbcTestExe\$(Configuration)</OutDir>
+    <IntDir>.vs\snappyodbcTestExe\$(Configuration)</IntDir>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="NMakeConfiguration" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <NMakeBuildCommandLine>gradlew.bat :snappyodbcTestX86ReleaseGoogleTestExe -PbothArch=1</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>gradlew.bat :clean -PbothArch=1</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>gradlew.bat :clean :snappyodbcTestX86ReleaseGoogleTestExe -PbothArch=1</NMakeReBuildCommandLine>
+    <NMakePreprocessorDefinitions>DLLBUILD;_CRT_SECURE_NO_WARNINGS</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath>src\driver\cpp;..\snappydata\store\native\dist\googletest-1.10.0\include;..\snappydata\store\native\dist\boost-1.76.0\include;..\snappydata\store\native\src\snappyclient\headers;..\snappydata\store\native\dist\mpir-2.7.2\win32\include</NMakeIncludeSearchPath>
+    <NMakeOutput>build-artifacts\win\exe\snappyodbcTest\x86\release\snappyodbcTest.exe</NMakeOutput>
+  </PropertyGroup>
+  <PropertyGroup Label="NMakeConfiguration" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <NMakeBuildCommandLine>gradlew.bat :snappyodbcTestX86DebugGoogleTestExe -PbothArch=1</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>gradlew.bat :clean -PbothArch=1</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>gradlew.bat :clean :snappyodbcTestX86DebugGoogleTestExe -PbothArch=1</NMakeReBuildCommandLine>
+    <NMakePreprocessorDefinitions>DLLBUILD;_DEBUG;_CRT_SECURE_NO_WARNINGS</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath>src\driver\cpp;..\snappydata\store\native\dist\googletest-1.10.0\include;..\snappydata\store\native\dist\boost-1.76.0\include;..\snappydata\store\native\src\snappyclient\headers;..\snappydata\store\native\dist\mpir-2.7.2\win32\include</NMakeIncludeSearchPath>
+    <NMakeOutput>build-artifacts\win\exe\snappyodbcTest\x86\debug\snappyodbcTest.exe</NMakeOutput>
+  </PropertyGroup>
+  <PropertyGroup Label="NMakeConfiguration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <NMakeBuildCommandLine>gradlew.bat :snappyodbcTestX64ReleaseGoogleTestExe -PbothArch=1</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>gradlew.bat :clean -PbothArch=1</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>gradlew.bat :clean :snappyodbcTestX64ReleaseGoogleTestExe -PbothArch=1</NMakeReBuildCommandLine>
+    <NMakePreprocessorDefinitions>DLLBUILD;_CRT_SECURE_NO_WARNINGS</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath>src\driver\cpp;..\snappydata\store\native\dist\googletest-1.10.0\include;..\snappydata\store\native\dist\boost-1.76.0\include;..\snappydata\store\native\src\snappyclient\headers;..\snappydata\store\native\dist\mpir-2.7.2\win64\include</NMakeIncludeSearchPath>
+    <NMakeOutput>build-artifacts\win\exe\snappyodbcTest\x64\release\snappyodbcTest.exe</NMakeOutput>
+  </PropertyGroup>
+  <PropertyGroup Label="NMakeConfiguration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <NMakeBuildCommandLine>gradlew.bat :snappyodbcTestX64DebugGoogleTestExe -PbothArch=1</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>gradlew.bat :clean -PbothArch=1</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>gradlew.bat :clean :snappyodbcTestX64DebugGoogleTestExe -PbothArch=1</NMakeReBuildCommandLine>
+    <NMakePreprocessorDefinitions>DLLBUILD;_DEBUG;_CRT_SECURE_NO_WARNINGS</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath>src\driver\cpp;..\snappydata\store\native\dist\googletest-1.10.0\include;..\snappydata\store\native\dist\boost-1.76.0\include;..\snappydata\store\native\src\snappyclient\headers;..\snappydata\store\native\dist\mpir-2.7.2\win64\include</NMakeIncludeSearchPath>
+    <NMakeOutput>build-artifacts\win\exe\snappyodbcTest\x64\debug\snappyodbcTest.exe</NMakeOutput>
+  </PropertyGroup>
+  <ItemGroup Label="Sources">
+    <ClCompile Include="build.gradle" />
+    <ClCompile Include="src\test\cpp\perf\Test44550.cpp" />
+    <ClCompile Include="src\test\cpp\perf\Test44550_1.cpp" />
+    <ClCompile Include="src\test\cpp\unit\SDENT-76-Test.cpp" />
+    <ClCompile Include="src\test\cpp\unit\TestHelper.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLAllocHandle.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLBindCol.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLBindParameter.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLBrowseConnect.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLBulkOperations.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLCancel.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLCancelHandle.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLCloseCursor.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLColAttribute.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLColumnPrivileges.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLColumns.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLConnect.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLDescribeCol.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLDescribeParam.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLDisconnect.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLDriverConnect.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLEndTran.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLExecDirect.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLExecute.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLFetch.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLFetchScroll.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLForeignKeys.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLFreeHandle.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLFreeStmt.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLGetConnectAttr.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLGetCursorName.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLGetData.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLGetDiagField.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLGetDiagRec.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLGetEnvAttr.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLGetFunctions.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLGetInfo.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLGetStmtAttr.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLGetTypeInfo.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLMoreResults.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLNativeSql.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLNumParams.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLNumResultCols.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLParamData.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLPrepare.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLPrimaryKeys.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLProcedureColumns.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLProcedures.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLPutData.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLRowCount.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLSetConnectAttr.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLSetCursorName.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLSetEnvAttr.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLSetPos.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLSetStmtAttr.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLSpecialColumns.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLStatistics.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLTablePrivileges.cpp" />
+    <ClCompile Include="src\test\cpp\unit\testSQLTables.cpp" />
+    <ClCompile Include="src\driver\cpp\DriverBase.cpp" />
+    <ClCompile Include="src\driver\cpp\DriverSetup.cpp" />
+    <ClCompile Include="src\driver\cpp\Library.cpp" />
+    <ClCompile Include="src\driver\cpp\OdbcIniKeys.cpp" />
+    <ClCompile Include="src\driver\cpp\SnappyConnection.cpp" />
+    <ClCompile Include="src\driver\cpp\SnappyDefaults.cpp" />
+    <ClCompile Include="src\driver\cpp\SnappyDescriptor.cpp" />
+    <ClCompile Include="src\driver\cpp\SnappyDriverAPIs.cpp" />
+    <ClCompile Include="src\driver\cpp\SnappyEnvironment.cpp" />
+    <ClCompile Include="src\driver\cpp\SnappyStatement.cpp" />
+    <ClCompile Include="src\driver\cpp\StringFunctions.cpp" />
+  </ItemGroup>
+  <ItemGroup Label="Headers">
+    <ClInclude Include="src\test\cpp\unit\TestHelper.h" />
+    <ClInclude Include="src\driver\cpp\ArrayIterator.h" />
+    <ClInclude Include="src\driver\cpp\ConnStringPropertyReader.h" />
+    <ClInclude Include="src\driver\cpp\DriverBase.h" />
+    <ClInclude Include="src\driver\cpp\IniPropertyReader.h" />
+    <ClInclude Include="src\driver\cpp\Library.h" />
+    <ClInclude Include="src\driver\cpp\OdbcBase.h" />
+    <ClInclude Include="src\driver\cpp\OdbcIniKeys.h" />
+    <ClInclude Include="src\driver\cpp\PropertyReader.h" />
+    <ClInclude Include="src\driver\cpp\SnappyConnection.h" />
+    <ClInclude Include="src\driver\cpp\SnappyDefaults.h" />
+    <ClInclude Include="src\driver\cpp\SnappyDescriptor.h" />
+    <ClInclude Include="src\driver\cpp\SnappyEnvironment.h" />
+    <ClInclude Include="src\driver\cpp\SnappyStatement.h" />
+    <ClInclude Include="src\driver\cpp\StringFunctions.h" />
+  </ItemGroup>
+  <ItemGroup Label="References">
+    <None Include=".clang-format" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

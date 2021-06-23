@@ -1,0 +1,49 @@
+[ODBC]
+Trace = no
+TraceFile = dmtrace.log
+
+[ODBC Drivers]
+SnappyData = Installed
+SnappyData Debug = Installed
+SnappyData x32 = Installed
+SnappyData Debug x32 = Installed
+
+[SnappyData]
+Driver = /opt/snappydata/odbc/x64/release/libsnappyodbc.so
+Setup = /opt/snappydata/odbc/x64/release/libsnappyodbc.so
+Description = SnappyData ODBC driver (64-bit)
+APILevel = 1
+ConnectFunctions = YYN
+DriverODBCVer = 03.52
+FileUsage = 0
+SQLLevel = 0
+
+[SnappyData Debug]
+Driver = /opt/snappydata/odbc/x64/debug/libsnappyodbc.so
+Setup = /opt/snappydata/odbc/x64/debug/libsnappyodbc.so
+Description = SnappyData ODBC driver with debug symbols (64-bit)
+APILevel = 1
+ConnectFunctions = YYN
+DriverODBCVer = 03.52
+FileUsage = 0
+SQLLevel = 0
+
+[SnappyData x32]
+Driver = /opt/snappydata/odbc/x32/release/libsnappyodbc.so
+Setup = /opt/snappydata/odbc/x32/release/libsnappyodbc.so
+Description = SnappyData ODBC driver (32-bit)
+APILevel = 1
+ConnectFunctions = YYN
+DriverODBCVer = 03.52
+FileUsage = 0
+SQLLevel = 0
+
+[SnappyData Debug x32]
+Driver = /opt/snappydata/odbc/x32/debug/libsnappyodbc.so
+Setup = /opt/snappydata/odbc/x32/debug/libsnappyodbc.so
+Description = SnappyData ODBC driver with debug symbols (32-bit)
+APILevel = 1
+ConnectFunctions = YYN
+DriverODBCVer = 03.52
+FileUsage = 0
+SQLLevel = 0

@@ -1,0 +1,81 @@
+diff '--color=auto' -ur boost_1_76_0.orig/boost/chrono/io/duration_io.hpp boost_1_76_0/boost/chrono/io/duration_io.hpp
+--- boost_1_76_0.orig/boost/chrono/io/duration_io.hpp	2021-04-13 21:51:36.000000000 +0530
++++ boost_1_76_0/boost/chrono/io/duration_io.hpp	2021-05-24 01:28:05.256013604 +0530
+@@ -17,7 +17,7 @@
+ #include <boost/chrono/io/duration_put.hpp>
+ #include <boost/chrono/io/duration_get.hpp>
+ #include <boost/chrono/io/utility/manip_base.hpp>
+-#include <boost/detail/no_exceptions_support.hpp>
++#include <boost/core/no_exceptions_support.hpp>
+ #include <boost/type_traits/is_integral.hpp>
+ #include <boost/type_traits/is_floating_point.hpp>
+ #include <locale>
+diff '--color=auto' -ur boost_1_76_0.orig/boost/chrono/io/duration_style.hpp boost_1_76_0/boost/chrono/io/duration_style.hpp
+--- boost_1_76_0.orig/boost/chrono/io/duration_style.hpp	2021-04-13 21:51:36.000000000 +0530
++++ boost_1_76_0/boost/chrono/io/duration_style.hpp	2021-05-24 01:29:08.910602039 +0530
+@@ -10,7 +10,7 @@
+ #ifndef BOOST_CHRONO_IO_DURATION_STYLE_HPP
+ #define BOOST_CHRONO_IO_DURATION_STYLE_HPP
+ 
+-#include <boost/detail/scoped_enum_emulation.hpp>
++#include <boost/core/scoped_enum.hpp>
+ 
+ namespace boost
+ {
+diff '--color=auto' -ur boost_1_76_0.orig/boost/chrono/io/time_point_io.hpp boost_1_76_0/boost/chrono/io/time_point_io.hpp
+--- boost_1_76_0.orig/boost/chrono/io/time_point_io.hpp	2021-04-13 21:51:36.000000000 +0530
++++ boost_1_76_0/boost/chrono/io/time_point_io.hpp	2021-05-24 01:28:50.314527622 +0530
+@@ -29,7 +29,7 @@
+ #include <boost/chrono/round.hpp>
+ #include <boost/chrono/detail/scan_keyword.hpp>
+ #include <boost/static_assert.hpp>
+-#include <boost/detail/no_exceptions_support.hpp>
++#include <boost/core/no_exceptions_support.hpp>
+ #include <cstring>
+ #include <locale>
+ #include <ctime>
+diff '--color=auto' -ur boost_1_76_0.orig/boost/chrono/io/timezone.hpp boost_1_76_0/boost/chrono/io/timezone.hpp
+--- boost_1_76_0.orig/boost/chrono/io/timezone.hpp	2021-04-13 21:51:36.000000000 +0530
++++ boost_1_76_0/boost/chrono/io/timezone.hpp	2021-05-24 01:28:22.825425346 +0530
+@@ -9,7 +9,8 @@
+ 
+ #ifndef BOOST_CHRONO_IO_TIMEZONE_HPP
+ #define BOOST_CHRONO_IO_TIMEZONE_HPP
+-#include <boost/detail/scoped_enum_emulation.hpp>
++
++#include <boost/core/scoped_enum.hpp>
+ 
+ namespace boost
+ {
+diff '--color=auto' -ur boost_1_76_0.orig/tools/build/src/tools/gcc.jam boost_1_76_0/tools/build/src/tools/gcc.jam
+--- boost_1_76_0.orig/tools/build/src/tools/gcc.jam	2021-04-13 21:53:21.000000000 +0530
++++ boost_1_76_0/tools/build/src/tools/gcc.jam	2021-05-24 01:27:00.881606050 +0530
+@@ -704,9 +704,9 @@
+ ###
+ 
+ # Declare flags and action for compilation.
+-toolset.flags gcc.compile OPTIONS <optimization>off   : -O0 ;
+-toolset.flags gcc.compile OPTIONS <optimization>speed : -O3 ;
+-toolset.flags gcc.compile OPTIONS <optimization>space : -Os ;
++toolset.flags gcc.compile OPTIONS <optimization>off   : -O0 -DPIC -fPIC ;
++toolset.flags gcc.compile OPTIONS <optimization>speed : -O3 -DPIC -fPIC ;
++toolset.flags gcc.compile OPTIONS <optimization>space : -Os -DPIC -fPIC ;
+ 
+ toolset.flags gcc.compile OPTIONS <inlining>off  : -fno-inline ;
+ toolset.flags gcc.compile OPTIONS <inlining>on   : -Wno-inline ;
+diff '--color=auto' -ur boost_1_76_0.orig/tools/build/src/tools/gcc.py boost_1_76_0/tools/build/src/tools/gcc.py
+--- boost_1_76_0.orig/tools/build/src/tools/gcc.py	2021-04-13 21:53:21.000000000 +0530
++++ boost_1_76_0/tools/build/src/tools/gcc.py	2021-05-24 01:27:00.884939262 +0530
+@@ -278,9 +278,9 @@
+ flags('gcc.compile', 'PCH_FILE', ['<pch>on'], ['<pch-file>'])
+ 
+ # Declare flags and action for compilation
+-flags('gcc.compile', 'OPTIONS', ['<optimization>off'], ['-O0'])
+-flags('gcc.compile', 'OPTIONS', ['<optimization>speed'], ['-O3'])
+-flags('gcc.compile', 'OPTIONS', ['<optimization>space'], ['-Os'])
++flags('gcc.compile', 'OPTIONS', ['<optimization>off'], ['-O0', '-DPIC', '-fPIC'])
++flags('gcc.compile', 'OPTIONS', ['<optimization>speed'], ['-O3', '-DPIC', '-fPIC'])
++flags('gcc.compile', 'OPTIONS', ['<optimization>space'], ['-Os', '-DPIC', '-fPIC'])
+ 
+ flags('gcc.compile', 'OPTIONS', ['<inlining>off'], ['-fno-inline'])
+ flags('gcc.compile', 'OPTIONS', ['<inlining>on'], ['-Wno-inline'])

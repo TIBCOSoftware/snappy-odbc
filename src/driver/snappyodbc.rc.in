@@ -1,0 +1,39 @@
+#include <winver.h>
+
+LANGUAGE 0x09, 0x01
+
+1 VERSIONINFO
+FILEVERSION @DRIVER_MAJOR_VERSION@, @DRIVER_MINOR_VERSION@, @DRIVER_PATCH_VERSION@, 0
+PRODUCTVERSION @DRIVER_MAJOR_VERSION@, @DRIVER_MINOR_VERSION@, @DRIVER_PATCH_VERSION@, 0
+FILEOS VOS__WINDOWS32
+FILETYPE VFT_DLL
+FILESUBTYPE 0x0L
+#ifdef _DEBUG
+  FILEFLAGS 0x01L
+#else
+  FILEFLAGS 0x00L
+#endif
+FILEFLAGSMASK 0x3fL
+{
+  BLOCK "StringFileInfo"
+  {
+    BLOCK "040904b0"
+    {
+        VALUE "CompanyName", "TIBCO Software Inc."
+        VALUE "CompanyShortName", "TIBCO Software Inc"
+        VALUE "FileDescription", "SnappyData ODBC Driver DLL"
+        VALUE "FileVersion", "@DRIVER_VERSION@.1"
+        VALUE "InternalName", "SnappyODBC"
+        VALUE "LegalCopyright", "Copyright (C) 2021 TIBCO Software Inc. All rights reserved."
+        VALUE "OriginalFilename", "snappyodbc"
+        VALUE "ProductName", "SnappyData ODBC Driver"
+        VALUE "ProductShortName", "SnappyData ODBC Driver"
+        VALUE "ProductVersion", "@DRIVER_VERSION@.0"
+    }
+  }
+
+  BLOCK "VarFileInfo"
+  {
+    VALUE "Translation", 0x0409 0x04B0
+  }
+}

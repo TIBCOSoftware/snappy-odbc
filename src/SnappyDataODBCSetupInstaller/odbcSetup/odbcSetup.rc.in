@@ -1,0 +1,263 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "WinResrc.h"
+#define IDC_STATIC -1
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE
+BEGIN
+    "#include ""WinResrc.h""\r\n"
+    "#define IDC_STATIC -1""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ConnectDLG DIALOGEX 0, 0, 250, 360
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "SnappyData ODBC Login"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Data Source", IDC_STATIC, 17, 20, 43, 12
+    EDITTEXT        IDC_DSNEDIT, 82, 17, 155, 12, ES_AUTOHSCROLL
+    LTEXT           "Server", IDC_STATIC, 17, 40, 34, 12
+    EDITTEXT        IDC_SERVEREDIT, 82, 37, 155, 12, ES_AUTOHSCROLL
+    LTEXT           "Port", IDC_STATIC, 17, 60, 39, 12
+    EDITTEXT        IDC_PORTEDIT, 82, 57, 155, 12, ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "User", IDC_STATIC, 17, 80, 39, 12
+    EDITTEXT        IDC_UIDEDIT, 82, 77, 155, 12, ES_AUTOHSCROLL
+    LTEXT           "Password", IDC_STATIC, 18, 100, 39, 12
+    EDITTEXT        IDC_PWDEDIT, 82, 97, 155, 12, ES_PASSWORD | ES_AUTOHSCROLL
+    LTEXT           "Default Schema (optional)", IDC_STATIC, 18, 114, 55, 16
+    EDITTEXT        IDC_DEFAULTSCHEMAEDIT, 82, 117, 155, 12, ES_AUTOHSCROLL
+
+    LTEXT           "Use Credential Manager", IDC_STATIC, 30, 137, 85, 12
+    AUTOCHECKBOX    "Use Credential Manager", IDC_CREDENTIALMANAGEREDIT, 17, 134, 10, 14, BS_AUTOCHECKBOX | WS_TABSTOP
+    LTEXT           "Load Balance", IDC_STATIC, 125, 137, 50, 12
+    AUTOCHECKBOX    "Load Balance", IDC_LOADBALANCEEDIT, 112, 134, 10, 14, BS_AUTOCHECKBOX | WS_TABSTOP
+    LTEXT           "Auto Reconnect", IDC_STATIC, 185, 137, 55, 12
+    AUTOCHECKBOX    "Auto Reconnect", IDC_AUTORECONNECTEDIT, 172, 134, 10, 14, BS_AUTOCHECKBOX | WS_TABSTOP
+
+    LTEXT           "Enable AQP", IDC_STATIC, 30, 156, 100, 12
+    AUTOCHECKBOX    "Enable AQP", IDC_AQP, 17, 153, 10, 14, BS_AUTOCHECKBOX | WS_TABSTOP
+    LTEXT           "Behavior", IDC_STATIC, 120, 156, 39, 12
+    CONTROL         "Behavior", IDC_AQPBEHAVIOREDIT, "COMBOBOX", CBS_DROPDOWNLIST, 155, 155, 82, 12
+    LTEXT           "Error (> 0.0 && < 1.0)", IDC_STATIC, 17, 173, 70, 12
+    EDITTEXT        IDC_AQPERROREDIT, 92, 171, 22, 12, ES_LEFT | WS_BORDER | WS_TABSTOP
+    LTEXT           "Confidence (> 0.0 && < 1.0)", IDC_STATIC, 120, 173, 90, 12
+    EDITTEXT        IDC_AQPCONFIDENCEEDIT, 215, 171, 22, 12, ES_LEFT | WS_BORDER | WS_TABSTOP
+
+    LTEXT           "Enable SSL", IDC_STATIC, 30, 195, 50, 12
+    AUTOCHECKBOX    "Enable SSL", IDC_SSLEDIT, 17, 192, 10, 14, BS_AUTOCHECKBOX | WS_TABSTOP
+    LTEXT           "Ciphers (optional)", IDC_STATIC, 120, 195, 60, 12
+    EDITTEXT        IDC_CIPHERS, 182, 193, 55, 12, ES_AUTOHSCROLL
+    LTEXT           "Trusted Certificate File", IDC_STATIC, 17, 209, 80, 12
+    EDITTEXT        IDC_TRUSTCERTFICATE, 17, 219, 166, 12, ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse", IDC_BROWSE, 185, 219, 52, 12
+
+    LTEXT           "Mutual SSL Authentication", IDC_STATIC, 30, 238, 100, 12
+    AUTOCHECKBOX    "Mutual SSL Authentication", IDC_TWOWAYSSLCHECK, 17, 235, 10, 14, BS_AUTOCHECKBOX | WS_TABSTOP
+    LTEXT           "Client Certificate File", IDC_STATIC, 17, 252, 80, 12
+    EDITTEXT        IDC_CLIENTCERTFICATE, 17, 262, 166, 12, ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse", IDC_BROWSE_CLIENTCERT, 185, 262, 52, 12
+    LTEXT           "Client Private Key File", IDC_STATIC, 17, 279, 80, 12
+    EDITTEXT        IDC_CLIENTPRIVATEKEY, 17, 289, 166, 12, ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse", IDC_BROWSE_CLIENTPRIVATEKEY, 185, 289, 52, 12
+    LTEXT           "Client Private Key Password", IDC_STATIC, 17, 306, 120, 12
+    EDITTEXT        IDC_CLIENTPRIVATEKEYPASSWORD, 17, 316, 166, 12, ES_PASSWORD | ES_AUTOHSCROLL
+    PUSHBUTTON      "Test Connection", IDTESTCONN, 30, 340, 67, 14
+    DEFPUSHBUTTON   "OK", IDOK, 120, 340, 50, 14
+    PUSHBUTTON      "Cancel", IDCANCEL, 174, 340, 50, 14
+END
+
+IDD_ConnectDLG_EDIT DIALOGEX 0, 0, 250, 360
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "SnappyData ODBC Login"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Data Source", IDC_STATIC, 17, 20, 43, 12
+    EDITTEXT        IDC_DSNEDIT, 82, 17, 155, 12, ES_AUTOHSCROLL
+    LTEXT           "Server", IDC_STATIC, 17, 40, 34, 12
+    EDITTEXT        IDC_SERVEREDIT, 82, 37, 155, 12, ES_AUTOHSCROLL
+    LTEXT           "Port", IDC_STATIC, 17, 60, 39, 12
+    EDITTEXT        IDC_PORTEDIT, 82, 57, 155, 12, ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "User", IDC_STATIC, 17, 80, 39, 12
+    EDITTEXT        IDC_UIDEDIT, 82, 77, 155, 12, ES_AUTOHSCROLL
+    LTEXT           "Password", IDC_STATIC, 18, 100, 39, 12
+    EDITTEXT        IDC_PWDEDIT, 82, 97, 155, 12, ES_PASSWORD | ES_AUTOHSCROLL
+    LTEXT           "Default Schema (optional)", IDC_STATIC, 18, 114, 55, 16
+    EDITTEXT        IDC_DEFAULTSCHEMAEDIT, 82, 117, 155, 12, ES_AUTOHSCROLL
+
+    LTEXT           "Use Credential Manager", IDC_STATIC, 30, 137, 85, 12
+    AUTOCHECKBOX    "Use Credential Manager", IDC_CREDENTIALMANAGEREDIT, 17, 134, 10, 14, BS_AUTOCHECKBOX | WS_TABSTOP
+    LTEXT           "Load Balance", IDC_STATIC, 125, 137, 50, 12
+    AUTOCHECKBOX    "Load Balance", IDC_LOADBALANCEEDIT, 112, 134, 10, 14, BS_AUTOCHECKBOX | WS_TABSTOP
+    LTEXT           "Auto Reconnect", IDC_STATIC, 185, 137, 55, 12
+    AUTOCHECKBOX    "Auto Reconnect", IDC_AUTORECONNECTEDIT, 172, 134, 10, 14, BS_AUTOCHECKBOX | WS_TABSTOP
+
+    LTEXT           "Enable AQP", IDC_STATIC, 30, 156, 100, 12
+    AUTOCHECKBOX    "Enable AQP", IDC_AQP, 17, 153, 10, 14, BS_AUTOCHECKBOX | WS_TABSTOP
+    LTEXT           "Behavior", IDC_STATIC, 120, 156, 39, 12
+    CONTROL         "Behavior", IDC_AQPBEHAVIOREDIT, "COMBOBOX", CBS_DROPDOWNLIST, 155, 155, 82, 12
+    LTEXT           "Error (> 0.0 && < 1.0)", IDC_STATIC, 17, 173, 70, 12
+    EDITTEXT        IDC_AQPERROREDIT, 92, 171, 22, 12, ES_LEFT | WS_BORDER | WS_TABSTOP
+    LTEXT           "Confidence (> 0.0 && < 1.0)", IDC_STATIC, 120, 173, 90, 12
+    EDITTEXT        IDC_AQPCONFIDENCEEDIT, 215, 171, 22, 12, ES_LEFT | WS_BORDER | WS_TABSTOP
+
+    LTEXT           "Enable SSL", IDC_STATIC, 30, 195, 50, 12
+    AUTOCHECKBOX    "Enable SSL", IDC_SSLEDIT, 17, 192, 10, 14, BS_AUTOCHECKBOX | WS_TABSTOP
+    LTEXT           "Ciphers (optional)", IDC_STATIC, 120, 195, 60, 12
+    EDITTEXT        IDC_CIPHERS, 182, 193, 55, 12, ES_AUTOHSCROLL
+    LTEXT           "Trusted Certificate File", IDC_STATIC, 17, 209, 80, 12
+    EDITTEXT        IDC_TRUSTCERTFICATE, 17, 219, 166, 12, ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse", IDC_BROWSE, 185, 219, 52, 12
+
+    LTEXT           "Mutual SSL Authentication", IDC_STATIC, 30, 238, 100, 12
+    AUTOCHECKBOX    "Mutual SSL Authentication", IDC_TWOWAYSSLCHECK, 17, 235, 10, 14, BS_AUTOCHECKBOX | WS_TABSTOP
+    LTEXT           "Client Certificate File", IDC_STATIC, 17, 252, 80, 12
+    EDITTEXT        IDC_CLIENTCERTFICATE, 17, 262, 166, 12, ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse", IDC_BROWSE_CLIENTCERT, 185, 262, 52, 12
+    LTEXT           "Client Private Key File", IDC_STATIC, 17, 279, 80, 12
+    EDITTEXT        IDC_CLIENTPRIVATEKEY, 17, 289, 166, 12, ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse", IDC_BROWSE_CLIENTPRIVATEKEY, 185, 289, 52, 12
+    LTEXT           "Client Private Key Password", IDC_STATIC, 17, 306, 120, 12
+    EDITTEXT        IDC_CLIENTPRIVATEKEYPASSWORD, 17, 316, 166, 12, ES_PASSWORD | ES_AUTOHSCROLL
+    PUSHBUTTON      "Test Connection", IDTESTCONN, 30, 340, 67, 14
+    DEFPUSHBUTTON   "OK", IDOK, 120, 340, 50, 14
+    PUSHBUTTON      "Cancel", IDCANCEL, 174, 340, 50, 14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ConnectDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 243
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 152
+    END
+
+    IDD_ConnectDLG_EDIT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 243
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 152
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_ConnectDLG AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_ConnectDLG_EDIT AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
+1 VERSIONINFO
+FILEVERSION @DRIVER_MAJOR_VERSION@, @DRIVER_MINOR_VERSION@, @DRIVER_PATCH_VERSION@, 0
+PRODUCTVERSION @DRIVER_MAJOR_VERSION@, @DRIVER_MINOR_VERSION@, @DRIVER_PATCH_VERSION@, 0
+FILEOS VOS__WINDOWS32
+FILETYPE VFT_DLL
+FILESUBTYPE 0x0L
+#ifdef _DEBUG
+  FILEFLAGS 0x01L
+#else
+  FILEFLAGS 0x00L
+#endif
+FILEFLAGSMASK 0x3fL
+{
+  BLOCK "StringFileInfo"
+  {
+    BLOCK "040904b0"
+    {
+        VALUE "CompanyName", "TIBCO Software Inc."
+        VALUE "CompanyShortName", "TIBCO Software Inc"
+        VALUE "FileDescription", "SnappyData ODBC Driver Setup DLL"
+        VALUE "FileVersion", "@DRIVER_VERSION@.0"
+        VALUE "InternalName", "ODBCSetup"
+        VALUE "LegalCopyright", "Copyright (C) 2021 TIBCO Software Inc. All rights reserved."
+        VALUE "OriginalFilename", "odbcSetup"
+        VALUE "ProductName", "SnappyData ODBC Driver"
+        VALUE "ProductShortName", "SnappyData ODBC Driver"
+        VALUE "ProductVersion", "@DRIVER_VERSION@.0"
+        //VALUE "LastChange", "823bcc4ab0d2ca3b9f3da282f0e6bd7b342b7d94-refs/heads/master@{#823bcc4}"
+        //VALUE "Official Build", "0"
+    }
+  }
+
+  BLOCK "VarFileInfo"
+  {
+    VALUE "Translation", 0x0409 0x04B0
+  }
+}
