@@ -47,6 +47,19 @@
 using namespace io::snappydata;
 using namespace io::snappydata::impl;
 
+// ODBC 3.8
+extern "C" {
+#ifndef SQL_API_SQLCANCELHANDLE
+  #ifdef _WINDOWS
+    #define SQL_API_SQLCANCELHANDLE 1550
+  #else
+    #define SQL_API_SQLCANCELHANDLE 1022
+  #endif
+#endif
+
+SQLRETURN SQL_API SQLCancelHandle(SQLSMALLINT handleType, SQLHANDLE handle);
+}
+
 /*
  * List of functions supported by the SnappyData ODBC driver used
  * in SQLGetFunctions API
@@ -54,8 +67,8 @@ using namespace io::snappydata::impl;
 SQLUSMALLINT snappySupportedfunctions[] = { SQL_API_SQLALLOCHANDLE,
                                             SQL_API_SQLALLOCSTMT,
                                             SQL_API_SQLBINDCOL,
-                                            // TODO: no Spark job cancellation support
-                                            // SQL_API_SQLCANCEL,
+                                            SQL_API_SQLCANCEL,
+                                            SQL_API_SQLCANCELHANDLE,
                                             SQL_API_SQLCLOSECURSOR,
                                             SQL_API_SQLCOLATTRIBUTE,
                                             SQL_API_SQLCOLUMNS,
@@ -911,11 +924,6 @@ SQLRETURN SQL_API SQLCancel(SQLHSTMT stmtHandle) {
     FUNCTION_RETURN_HANDLE(stmtHandle, result);
   }
   return SnappyHandleBase::errorNullHandle(SQL_HANDLE_STMT);
-}
-
-// ODBC 3.8
-extern "C" {
-  SQLRETURN SQL_API SQLCancelHandle(SQLSMALLINT handleType, SQLHANDLE handle);
 }
 
 SQLRETURN SQL_API SQLCancelHandle(SQLSMALLINT handleType,

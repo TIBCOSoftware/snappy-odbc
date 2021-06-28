@@ -28,9 +28,8 @@ EXPORTS
     SQLSetPos
     SQLGetData
     SQLCloseCursor
-    ; below two disabled since Spark job cancellation is not implemented using APIs
-    ;SQLCancel
-    ;SQLCancelHandle
+    SQLCancel
+    SQLCancelHandle
     SQLFreeStmt
     SQLGetStmtAttr
     SQLSetStmtAttr
