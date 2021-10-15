@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<connection-customization class='genericodbc' enabled='true' version='8.0'>
+  <vendor name='SnappyData'/>
+  <driver name='SnappyData ODBC Driver'/>
+  <customizations>
+    <customization name='CAP_CREATE_TEMP_TABLES' value='yes'/>
+    <customization name='CAP_ODBC_CURSOR_FORWARD_ONLY' value='yes'/>
+    <customization name='CAP_QUERY_GROUP_BY_ALIAS' value='yes'/>
+    <customization name='CAP_QUERY_GROUP_BY_DEGREE' value='yes'/>
+    <customization name='CAP_QUERY_HAVING_REQUIRES_GROUP_BY' value='yes'/>
+    <customization name='CAP_QUERY_JOIN_ACROSS_SCHEMAS' value='yes'/>
+    <customization name='CAP_QUERY_SORT_BY_DEGREE' value='yes'/>
+    <customization name='CAP_QUERY_SUBQUERIES' value='yes'/>
+    <customization name='CAP_QUERY_SUBQUERIES_WITH_TOP' value='yes'/>
+    <customization name='CAP_QUERY_TOP_N' value='yes'/>
+    <customization name='CAP_QUERY_TOPSTYLE_TOP' value='no'/>
+    <customization name='CAP_QUERY_TOPSTYLE_LIMIT' value='yes'/>
+    <customization name='CAP_QUERY_SUBQUERY_QUERY_CONTEXT' value='yes'/>
+    <customization name='CAP_SELECT_INTO' value='no'/>
+    <customization name='CAP_SELECT_TOP_INTO' value='yes'/>
+    <customization name='CAP_ODBC_SUPPRESS_INFO_SCHEMA_STORED_PROCS' value='yes'/>
+    <customization name='CAP_ODBC_SUPPRESS_PREPARED_QUERY_FOR_ALL_COMMAND_QUERIES' value='yes'/>
+    <customization name='CAP_ODBC_SUPPRESS_PREPARED_QUERY_FOR_DDL_COMMAND_QUERIES' value='yes'/>
+    <customization name='CAP_ODBC_SUPPRESS_PREPARED_QUERY_FOR_DML_COMMAND_QUERIES' value='yes'/>
+    <customization name='CAP_SUPPRESS_DISPLAY_LIMITATIONS' value='yes'/>
+  </customizations>
+</connection-customization>
