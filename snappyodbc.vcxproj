@@ -113,6 +113,7 @@
   </ItemGroup>
   <ItemGroup Label="References">
     <None Include=".clang-format" />
+    <None Include="docs\Building-Windows.md" />
     <None Include="docs\Building.md" />
     <None Include="README.md" />
   </ItemGroup>

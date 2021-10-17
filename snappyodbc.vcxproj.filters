@@ -97,5 +97,6 @@
     <None Include=".clang-format" />
     <None Include="README.md" />
     <None Include="docs\Building.md" />
+    <None Include="docs\Building-Windows.md" />
   </ItemGroup>
 </Project>

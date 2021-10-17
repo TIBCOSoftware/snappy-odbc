@@ -65,13 +65,16 @@ public:
       // wait for all threads
       m_barrier.wait();
 
-      // sleep some time for the query execution to proceed
-      std::this_thread::sleep_for(std::chrono::seconds(2));
+      // cancel the statement a few times since query might be in an early stage
+      // of scheduling where cancel will be ineffective
+      for (int i = 0; i < 4; i++) {
+        // sleep some time for the query execution to proceed
+        std::this_thread::sleep_for(std::chrono::seconds(2));
 
-      // cancel the statement
-      SQLRETURN retcode = SQLCancel(m_hstmt);
-      DIAGRECCHECK(SQL_HANDLE_STMT, m_hstmt, 1, SQL_SUCCESS, retcode,
-          "SQLCancel");
+        SQLRETURN retcode = SQLCancel(m_hstmt);
+        DIAGRECCHECK(SQL_HANDLE_STMT, m_hstmt, 1, SQL_SUCCESS, retcode,
+            "SQLCancel");
+      }
     } catch (std::exception& ex) {
       LOGF("ERROR: failed with exception: %s", ex.what());
     } catch (...) {
