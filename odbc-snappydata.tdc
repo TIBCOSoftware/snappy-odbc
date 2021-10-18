@@ -1,27 +1,48 @@
 <?xml version='1.0' encoding='utf-8'?>
-<connection-customization class='genericodbc' enabled='true' version='8.0'>
+<connection-customization class='genericodbc' enabled='true' version='8.3'>
   <vendor name='SnappyData'/>
   <driver name='SnappyData ODBC Driver'/>
   <customizations>
-    <customization name='CAP_CREATE_TEMP_TABLES' value='yes'/>
+    <customization name='CAP_CREATE_TEMP_TABLES' value='no' />
+    <customization name='CAP_SELECT_INTO' value='no' />
+    <customization name='CAP_SELECT_TOP_INTO' value='no' />
+
     <customization name='CAP_ODBC_CURSOR_FORWARD_ONLY' value='yes'/>
-    <customization name='CAP_QUERY_GROUP_BY_ALIAS' value='yes'/>
-    <customization name='CAP_QUERY_GROUP_BY_DEGREE' value='yes'/>
-    <customization name='CAP_QUERY_HAVING_REQUIRES_GROUP_BY' value='yes'/>
-    <customization name='CAP_QUERY_JOIN_ACROSS_SCHEMAS' value='yes'/>
-    <customization name='CAP_QUERY_SORT_BY_DEGREE' value='yes'/>
-    <customization name='CAP_QUERY_SUBQUERIES' value='yes'/>
-    <customization name='CAP_QUERY_SUBQUERIES_WITH_TOP' value='yes'/>
-    <customization name='CAP_QUERY_TOP_N' value='yes'/>
-    <customization name='CAP_QUERY_TOPSTYLE_TOP' value='no'/>
-    <customization name='CAP_QUERY_TOPSTYLE_LIMIT' value='yes'/>
-    <customization name='CAP_QUERY_SUBQUERY_QUERY_CONTEXT' value='yes'/>
-    <customization name='CAP_SELECT_INTO' value='no'/>
-    <customization name='CAP_SELECT_TOP_INTO' value='yes'/>
-    <customization name='CAP_ODBC_SUPPRESS_INFO_SCHEMA_STORED_PROCS' value='yes'/>
+    <customization name='CAP_FAST_METADATA' value='yes' />
+
+    <customization name='CAP_ISOLATION_LEVEL_READ_COMMITTED' value='yes' />
+    <customization name='CAP_ISOLATION_LEVEL_READ_UNCOMMITTED' value='yes' />
+    <customization name='CAP_ISOLATION_LEVEL_REPEATABLE_READS' value='yes' />
+    <customization name='CAP_ISOLATION_LEVEL_SERIALIZABLE' value='no' />
+    <customization name='CAP_SET_ISOLATION_LEVEL_VIA_ODBC_API' value='yes' />
+
+    <customization name='CAP_MULTIPLE_CONNECTIONS_FROM_SAME_IP' value='yes' />
+
+    <customization name='CAP_ODBC_METADATA_SUPPRESS_SQLFOREIGNKEYS_API' value='no' />
+    <customization name='CAP_ODBC_METADATA_SUPPRESS_SQLPRIMARYKEYS_API' value='no' />
+    <customization name='CAP_ODBC_METADATA_SUPPRESS_SQLCOLUMNS_API' value='no' />
+    <customization name='CAP_ODBC_METADATA_SUPPRESS_SELECT_STAR' value='no' />
+    <customization name='CAP_ODBC_METADATA_SUPPRESS_PREPARED_QUERY' value='no' />
+    <customization name='CAP_ODBC_METADATA_SUPPRESS_EXECUTED_QUERY' value='no' />
     <customization name='CAP_ODBC_SUPPRESS_PREPARED_QUERY_FOR_ALL_COMMAND_QUERIES' value='yes'/>
     <customization name='CAP_ODBC_SUPPRESS_PREPARED_QUERY_FOR_DDL_COMMAND_QUERIES' value='yes'/>
     <customization name='CAP_ODBC_SUPPRESS_PREPARED_QUERY_FOR_DML_COMMAND_QUERIES' value='yes'/>
-    <customization name='CAP_SUPPRESS_DISPLAY_LIMITATIONS' value='yes'/>
+
+    <customization name='CAP_SKIP_CONNECT_VALIDATION' value='yes' />
+    <customization name='CAP_SUPPRESS_DISCOVERY_QUERIES' value='yes' />
+    <customization name='CAP_SUPPRESS_DISPLAY_LIMITATIONS' value='no' />
+
+    <customization name='CAP_QUERY_GROUP_BY_ALIAS' value='no' />
+    <customization name='CAP_QUERY_GROUP_BY_DEGREE' value='yes' />
+    <customization name='CAP_QUERY_HAVING_REQUIRES_GROUP_BY' value='yes' />
+    <customization name='CAP_QUERY_HAVING_UNSUPPORTED' value='no' />
+    <customization name='CAP_QUERY_INCLUDE_GROUP_BY_COLUMNS_IN_SELECT' value='yes' />
+    <customization name='CAP_QUERY_JOIN_ACROSS_SCHEMAS' value='yes'/>
+    <customization name='CAP_QUERY_SORT_BY_DEGREE' value='no' />
+    <customization name='CAP_QUERY_SUBQUERIES' value='yes' />
+    <customization name='CAP_QUERY_SUBQUERIES_WITH_TOP' value='yes' />
+    <customization name='CAP_QUERY_TOPSTYLE_LIMIT' value='yes' />
+    <customization name='CAP_QUERY_TOPSTYLE_TOP' value='no' />
+    <customization name='CAP_QUERY_TOP_N' value='yes' />
   </customizations>
 </connection-customization>

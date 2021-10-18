@@ -62,11 +62,17 @@ The ODBC driver provides a few additional features building on available server-
 
 ### Documentation
 
+<!--
 [SnappyData ODBC Driver Reference](docs/Reference.md) in the docs directory for the driver specific documentation.
+-->
 
-[SnappyData documentation](https://snappydata-docs.readthedocs.io)
+[Setting up ODBC Driver in SnappyData documentation](https://tibcosoftware.github.io/snappydata/setting_up_odbc_driver)
+
+[HowTo Connect Using ODBC Driver](https://tibcosoftware.github.io/snappydata/howto/connect_using_odbc_driver)
 
 [MSDN ODBC API Reference](https://docs.microsoft.com/en-us/sql/odbc/reference/syntax/odbc-api-reference)
+
+[SnappyData ODBC Supported API](https://tibcosoftware.github.io/snappydata/reference/API_Reference/odbc_supported_apis)
 
 ### Community
 
