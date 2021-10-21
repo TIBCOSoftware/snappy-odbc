@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>d793a2a0-4ee1-42c2-b2de-e726eeb24dfe</ProjectGuid>
-    <OutputPrefix>SnappyData-odbc_1.3.0_win</OutputPrefix>
+    <OutputPrefix>snappydata-odbc_1.3.0_win64</OutputPrefix>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputType>Package</OutputType>
   </PropertyGroup>
