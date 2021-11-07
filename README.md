@@ -74,6 +74,6 @@ The ODBC driver provides a few additional features building on available server-
 
 [SnappyData ODBC Supported API](https://tibcosoftware.github.io/snappydata/reference/API_Reference/odbc_supported_apis)
 
-### Community
-
 ### Licensing
+
+See the [LICENSE](LICENSE) / [LICENSE.rtf](LICENSE.rtf) files in the source tree.
