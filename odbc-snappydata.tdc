@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <connection-customization class='genericodbc' enabled='true' version='8.3'>
-  <vendor name='SnappyData'/>
-  <driver name='SnappyData ODBC Driver'/>
+  <vendor name='TIBCO Software Inc.'/>
+  <driver name='SnappyData'/>
   <customizations>
     <customization name='CAP_CREATE_TEMP_TABLES' value='no' />
     <customization name='CAP_SELECT_INTO' value='no' />
